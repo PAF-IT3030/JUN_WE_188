@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.boot.jackson.JsonComponent;
 
-import javax.sql.rowset.serial.SerialBlob;
+
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;

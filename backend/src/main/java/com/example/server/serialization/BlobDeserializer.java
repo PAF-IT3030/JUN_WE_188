@@ -3,7 +3,6 @@ package com.example.server.serialization;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.boot.jackson.JsonComponent;
 
 import javax.sql.rowset.serial.SerialBlob;

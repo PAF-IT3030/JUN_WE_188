@@ -27,9 +27,8 @@ const PostList = () => {
   const handlePreview = async (postId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8070/display/${postId}`
+        `http://localhost:8070/display?=${postId}`
       );
-
       setSelectedPost(response.data);
     } catch (error) {
       console.error("Error fetching post details:", error);
@@ -50,27 +49,10 @@ const PostList = () => {
       toast.success(`Image deleted successfully ${id}`);
     } catch (error) {
       console.error("Error deleting image:", error);
-      toast.error(`Failed to delete image " ${id}`);
+      toast.error(`Failed to delete image ${id}!`);
     }
   };
 
-  const handleDescriptionUpdate = async (id, updatedDescription) => {
-    try {
-      await axios.put(`http://localhost:8070/update-description?id=${id}`, {
-        description: updatedDescription,
-      });
-      // Update the description in the local state
-      setImages((prevImages) =>
-        prevImages.map((img) =>
-          img.id === id ? { ...img, description: updatedDescription } : img
-        )
-      );
-      toast.success("Description updated successfully.");
-    } catch (error) {
-      console.error("Error updating description:", error);
-      toast.error("Failed to update description.");
-    }
-  };
   return (
     <div className="post-list">
       <h2>My Posts</h2>
@@ -94,7 +76,7 @@ const PostList = () => {
               </button>
               <button
                 className="post-list__delete-btn"
-                onClick={() => handleDescriptionUpdate(post.id)}
+                onClick={() => handleDelete(post.id)}
               >
                 Delete
               </button>
