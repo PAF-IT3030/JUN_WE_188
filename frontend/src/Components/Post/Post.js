@@ -4,6 +4,7 @@ import "../../Styles/PostList.css"; // Import CSS file for styling
 import { toast } from "react-toastify";
 
 const PostList = () => {
+  const [setImages] = useState([]);
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
 
@@ -28,6 +29,7 @@ const PostList = () => {
       const response = await axios.get(
         `http://localhost:8070/display/${postId}`
       );
+
       setSelectedPost(response.data);
     } catch (error) {
       console.error("Error fetching post details:", error);
@@ -40,6 +42,35 @@ const PostList = () => {
     setSelectedPost(null);
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8070/delete-post?id=${id}`);
+      // Remove the deleted image from the local state
+      setImages((prevImages) => prevImages.filter((img) => img.id !== id));
+      toast.success(`Image deleted successfully ${id}`);
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      toast.error(`Failed to delete image " ${id}`);
+    }
+  };
+
+  const handleDescriptionUpdate = async (id, updatedDescription) => {
+    try {
+      await axios.put(`http://localhost:8070/update-description?id=${id}`, {
+        description: updatedDescription,
+      });
+      // Update the description in the local state
+      setImages((prevImages) =>
+        prevImages.map((img) =>
+          img.id === id ? { ...img, description: updatedDescription } : img
+        )
+      );
+      toast.success("Description updated successfully.");
+    } catch (error) {
+      console.error("Error updating description:", error);
+      toast.error("Failed to update description.");
+    }
+  };
   return (
     <div className="post-list">
       <h2>My Posts</h2>
@@ -55,8 +86,18 @@ const PostList = () => {
               >
                 Preview
               </button>
-              <button className="post-list__edit-btn">Edit</button>
-              <button className="post-list__delete-btn">Delete</button>
+              <button
+                className="post-list__edit-btn"
+                onClick={() => handlePreview(post.id)}
+              >
+                Edit
+              </button>
+              <button
+                className="post-list__delete-btn"
+                onClick={() => handleDescriptionUpdate(post.id)}
+              >
+                Delete
+              </button>
             </div>
           </li>
         ))}
