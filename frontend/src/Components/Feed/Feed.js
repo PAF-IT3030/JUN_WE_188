@@ -16,18 +16,6 @@ const Feed = ({ posts }) => {
       content: "This is the content of the first hard-coded post.",
       author: "Hard Coder",
     },
-    {
-      id: 2,
-      title: " Post 2",
-      content: "This is the content of the second hard-coded post.",
-      author: "Coder Hard",
-    },
-    {
-      id: 3,
-      title: " Post 3",
-      content: "This is the content of the third hard-coded post.",
-      author: "The Coder",
-    },
   ];
 
   return (

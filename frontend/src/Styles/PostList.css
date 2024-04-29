@@ -1,0 +1,38 @@
+.post-list {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  margin-bottom: 100px;
+}
+
+.post-list__items {
+  list-style-type: none;
+  padding: 0;
+}
+
+.post-list__item {
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.post-list__preview-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.post-preview {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+.post-preview__close-btn {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}

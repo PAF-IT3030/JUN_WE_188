@@ -7,6 +7,11 @@ import jakarta.persistence.*;
 import java.sql.Blob;
 import java.util.Date;
 
+import com.example.server.serialization.BlobDeserializer;
+import com.example.server.serialization.BlobSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 @Entity
 @Table(name = "image_table")
 public class Image {
@@ -19,6 +24,8 @@ public class Image {
 
     //stores as large object in the databse
     @Lob
+    @JsonSerialize(using = BlobSerializer.class)
+    @JsonDeserialize(using = BlobDeserializer.class)
     private Blob image;
 
     private String description; // Add description field
@@ -53,3 +60,6 @@ public class Image {
         return date;
     }
 }
+
+
+
