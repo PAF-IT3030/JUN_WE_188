@@ -1,45 +1,41 @@
-// SinglePost.js
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import "../../Styles/SinglePost.css";
 
 const SinglePost = () => {
+  const { postId } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const { postId } = useParams();
 
   useEffect(() => {
-    const fetchSinglePost = async () => {
+    const fetchPost = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/posts/${postId}`
+          `http://localhost:8070/display/${postId}`
         );
         setPost(response.data);
         setLoading(false);
       } catch (error) {
-        setError("Error fetching post");
+        console.error("Error fetching post:", error);
         setLoading(false);
       }
     };
 
-    fetchSinglePost();
+    fetchPost();
   }, [postId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!post) {
+    return <div>Post not found!</div>;
+  }
 
   return (
     <div>
-      <h2>Single Post</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : (
-        <div>
-          <h3>{post.title}</h3>
-          <p>{post.body}</p>
-        </div>
-      )}
+      <h2>{post.title}</h2>
+      <p>{post.content}</p>
     </div>
   );
 };

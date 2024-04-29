@@ -1,6 +1,7 @@
 .post-list {
   font-family: Arial, sans-serif;
   padding: 20px;
+  margin-bottom: 100px;
 }
 
 .post-list__items {

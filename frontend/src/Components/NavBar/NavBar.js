@@ -40,6 +40,11 @@ const NavBar = () => {
           </Link>
         </li>
         <li className="navbar-item">
+          <Link to="/imageUploader" className="navbar-link">
+            Upload Post
+          </Link>
+        </li>
+        <li className="navbar-item">
           <Link to="/" className="navbar-link">
             Logout
           </Link>
