@@ -26,11 +26,12 @@ const PostList = () => {
   const handlePreview = async (postId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8070/view-post/${postId}`
+        `http://localhost:8070/display/${postId}`
       );
       setSelectedPost(response.data);
     } catch (error) {
       console.error("Error fetching post details:", error);
+      toast.error(`Failed to display post ${postId}!`);
     }
   };
 
@@ -41,7 +42,7 @@ const PostList = () => {
 
   return (
     <div className="post-list">
-      <h2>Posts3333333333333333333333</h2>
+      <h2>My Posts</h2>
       <ul className="post-list__items">
         {posts.map((post) => (
           <li key={post.id} className="post-list__item">
