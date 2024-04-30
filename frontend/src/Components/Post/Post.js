@@ -65,6 +65,23 @@ const PostList = () => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      await axios.delete(
+        `http://localhost:8070/delete-post/${selectedImage.id}`
+      );
+      // Remove the deleted image from the local state
+      setImages((prevImages) =>
+        prevImages.filter((img) => img.id !== selectedImage.id)
+      );
+      toast.success("Image deleted successfully!");
+      setSelectedImage(null); // Close the popup window after deletion
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      toast.error("Failed to delete image!");
+    }
+  };
+
   return (
     <div className="post-list-container">
       <h2 className="post-list-heading">My Posts</h2>
@@ -80,6 +97,7 @@ const PostList = () => {
                 className="post-image"
                 onClick={() => handleImageClick(img.id)}
               />
+
               <p className="post-description">{img.description}</p>
             </div>
           ))}
@@ -89,7 +107,7 @@ const PostList = () => {
         <div className="popup-container active">
           <div className="popup-content active">
             <button className="close-popup" onClick={handleClosePreview}>
-              Close
+              Close Preview
             </button>
             <img
               src={`http://localhost:8070/display?id=${selectedImage.id}`}
@@ -106,6 +124,9 @@ const PostList = () => {
               onClick={handleDescriptionUpdate}
             >
               Update Description
+            </button>
+            <button className="delete-button" onClick={handleDelete}>
+              Delete
             </button>
           </div>
         </div>

@@ -1,7 +1,8 @@
 /* Post List Styles */
 .post-list-container {
   padding: 20px;
-  border: 1px solid #ccc;
+  background-color: rgb(233, 233, 233);
+  border: 1px solid #575757;
   border-radius: 8px;
 }
 
@@ -77,7 +78,7 @@
 }
 
 .popup-content {
-  background-color: #73737375;
+  background-color: #888888bd;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -103,6 +104,10 @@
   margin-bottom: 10px;
 }
 
+.close-popup:hover {
+  background-color: #610000;
+}
+
 .selected-image {
   max-width: 100%;
   height: auto;
@@ -114,10 +119,13 @@
   height: 100px;
   resize: vertical;
   margin-bottom: 10px;
+  background-color: #d3d3d3;
+  border-radius: 5px;
+  font-size: 35px;
 }
 
 .update-description-button {
-  background-color: #007bff;
+  background-color: #002650ad;
   color: #fff;
   font-size: 25px;
   border: none;
@@ -127,5 +135,15 @@
 }
 
 .update-description-button:hover {
-  background-color: #0056b3;
+  background-color: #004391ad;
+}
+
+.delete-button {
+  background-color: #ff1e00;
+  color: #fff;
+  font-size: 25px;
+  border: none;
+  padding: 20px 40px;
+  border-radius: 4px;
+  cursor: pointer;
 }
