@@ -86,6 +86,7 @@
   opacity: 0;
   transform: scale(0.8);
   transition: opacity 0.3s ease, transform 0.3s ease;
+  margin-bottom: 40px;
 }
 
 .popup-content.active {
@@ -120,7 +121,7 @@
   resize: vertical;
   margin-bottom: 10px;
   background-color: #d3d3d3;
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 35px;
 }
 

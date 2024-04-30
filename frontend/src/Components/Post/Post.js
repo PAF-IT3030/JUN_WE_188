@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../../Styles/PostList.css"; // Import CSS file for styling
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
+import "../../Styles/PostList.css"; // Import CSS file for styling
 
 const PostList = () => {
   const [images, setImages] = useState([]);
@@ -107,7 +109,7 @@ const PostList = () => {
         <div className="popup-container active">
           <div className="popup-content active">
             <button className="close-popup" onClick={handleClosePreview}>
-              Close Preview
+              <FontAwesomeIcon icon={faTimes} /> Close Preview
             </button>
             <img
               src={`http://localhost:8070/display?id=${selectedImage.id}`}
@@ -123,10 +125,10 @@ const PostList = () => {
               className="update-description-button"
               onClick={handleDescriptionUpdate}
             >
-              Update Description
+              <FontAwesomeIcon icon={faEdit} /> Update Description
             </button>
             <button className="delete-button" onClick={handleDelete}>
-              Delete
+              <FontAwesomeIcon icon={faTrash} /> Delete
             </button>
           </div>
         </div>

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../../Styles/ImageUploader.css"; // Import CSS file for styling
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload, faTrash } from "@fortawesome/free-solid-svg-icons";
+import "../../Styles/ImageUploader.css"; // Import CSS file for styling
 
 const ImageUploader = () => {
   const [file, setFile] = useState(null);
@@ -41,7 +43,6 @@ const ImageUploader = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      toast.success(`Post uploaded successfully!`);
       window.location.reload();
 
       console.log("Image uploaded successfully. Image ID:", response.data);
@@ -87,10 +88,11 @@ const ImageUploader = () => {
             className="submit-button"
             disabled={isUploading}
           >
+            <FontAwesomeIcon icon={faUpload} />{" "}
             {isUploading ? "Uploading..." : "Upload"}
           </button>
           <button type="button" className="clear-button" onClick={handleClear}>
-            Clear
+            <FontAwesomeIcon icon={faTrash} /> Clear
           </button>
         </div>
         {uploadError && <div className="error-message">{uploadError}</div>}
