@@ -6,8 +6,8 @@ import { toast } from "react-toastify";
 const PostList = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [updatedDescription, setUpdatedDescription] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -24,49 +24,41 @@ const PostList = () => {
     fetchImages();
   }, []);
 
-  // Fetch details of a specific post when image is clicked
-  // Fetch details of a specific post when image is clicked
   const handleImageClick = async (id) => {
     try {
       const response = await axios.get(
         `http://localhost:8070/display?id=${id}`
       );
-      setSelectedPost(response.data);
+      setSelectedImage({ ...response.data, id });
+      setDescription(response.data.description);
     } catch (error) {
       console.error("Error fetching post details:", error);
       toast.error(`Failed to display post ${id}!`);
     }
   };
 
-  // Close the preview and reset selectedPost state
   const handleClosePreview = () => {
-    setSelectedPost(null);
+    setSelectedImage(null);
   };
 
-  const handleDelete = async (id) => {
+  const handleDescriptionUpdate = async () => {
     try {
-      await axios.delete(`http://localhost:8070/delete-post/${id}`);
-      // Reload the page after successful deletion
-      window.location.reload();
-      toast.success(`Image deleted successfully ${id}`);
-    } catch (error) {
-      console.error("Error deleting image:", error);
-      toast.error(`Failed to delete image ${id}!`);
-    }
-  };
-
-  const handleDescriptionUpdate = async (id) => {
-    try {
-      await axios.put(`http://localhost:8070/update-description?id=${id}`, {
-        description: updatedDescription,
-      });
+      await axios.put(
+        `http://localhost:8070/update-description?id=${selectedImage.id}`,
+        {
+          description: description,
+        }
+      );
       // Update the description in the local state
       setImages((prevImages) =>
         prevImages.map((img) =>
-          img.id === id ? { ...img, description: updatedDescription } : img
+          img.id === selectedImage.id
+            ? { ...img, description: description }
+            : img
         )
       );
       toast.success("Description updated successfully!");
+      setSelectedImage(null); // Close the popup window after update
     } catch (error) {
       console.error("Error updating description:", error);
       toast.error("Failed to update description.");
@@ -74,54 +66,48 @@ const PostList = () => {
   };
 
   return (
-    <div className="post-list">
-      <h2>My Posts</h2>
+    <div className="post-list-container">
+      <h2 className="post-list-heading">My Posts</h2>
       {loading ? (
         <p>Loading images...</p>
       ) : (
-        <ul className="post-list__items">
+        <div className="post-list-items-container">
           {images.map((img) => (
-            <div key={img.id} className="image-item">
+            <div key={img.id} className="post-item">
               <img
                 src={`http://localhost:8070/display?id=${img.id}`}
                 alt="Uploaded"
-                className="uploaded-image"
+                className="post-image"
                 onClick={() => handleImageClick(img.id)}
               />
-              <p className="image-description">{img.description}</p>
-              <input
-                type="text"
-                value={updatedDescription}
-                onChange={(e) => setUpdatedDescription(e.target.value)}
-                className="edit-description-input"
-              />
-              <button
-                onClick={() => handleDelete(img.id)}
-                className="delete-button"
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => handleDescriptionUpdate(img.id)}
-                className="update-description-button"
-              >
-                Update Description
-              </button>
+              <p className="post-description">{img.description}</p>
             </div>
           ))}
-        </ul>
+        </div>
       )}
-      {selectedPost && (
-        <div className="post-preview">
-          <h2>Post Preview</h2>
-          <button
-            className="post-preview__close-btn"
-            onClick={handleClosePreview}
-          >
-            Close Preview
-          </button>
-          <h3>{selectedPost.title}</h3>
-          <p>{selectedPost.content}</p>
+      {selectedImage && (
+        <div className="popup-container active">
+          <div className="popup-content active">
+            <button className="close-popup" onClick={handleClosePreview}>
+              Close
+            </button>
+            <img
+              src={`http://localhost:8070/display?id=${selectedImage.id}`}
+              alt="Selected"
+              className="selected-image"
+            />
+            <textarea
+              className="description-textarea"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <button
+              className="update-description-button"
+              onClick={handleDescriptionUpdate}
+            >
+              Update Description
+            </button>
+          </div>
         </div>
       )}
     </div>
