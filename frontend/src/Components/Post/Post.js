@@ -16,7 +16,7 @@ const PostList = () => {
         setPosts(response.data);
       } catch (error) {
         console.error("Error fetching posts:", error);
-        toast.error("Failed to load post list!");
+        //toast.error("Failed to load post list!");
       }
     };
 
@@ -24,15 +24,15 @@ const PostList = () => {
   }, []);
 
   // Fetch details of a specific post when preview button is clicked
-  const handlePreview = async (postId) => {
+  const handlePreview = async (id) => {
     try {
       const response = await axios.get(
-        `http://localhost:8070/display?=${postId}`
+        `http://localhost:8070/display?id=${id}`
       );
       setSelectedPost(response.data);
     } catch (error) {
       console.error("Error fetching post details:", error);
-      toast.error(`Failed to display post ${postId}!`);
+      toast.error(`Failed to display post ${id}!`);
     }
   };
 
@@ -43,9 +43,9 @@ const PostList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8070/delete-post?id=${id}`);
-      // Remove the deleted image from the local state
-      setImages((prevImages) => prevImages.filter((img) => img.id !== id));
+      await axios.delete(`http://localhost:8070/delete-post/${id}`);
+      // Reload the page after successful deletion
+      window.location.reload();
       toast.success(`Image deleted successfully ${id}`);
     } catch (error) {
       console.error("Error deleting image:", error);

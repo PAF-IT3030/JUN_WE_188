@@ -21,6 +21,7 @@ const ImageUploader = () => {
   };
 
   const handleClear = () => {
+    window.location.reload();
     setFile(null);
     setDescription("");
     setPreviewUrl("");
@@ -40,7 +41,7 @@ const ImageUploader = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-
+      window.location.reload();
       toast.success(`Post uploaded successfully!`);
       console.log("Image uploaded successfully. Image ID:", response.data);
       // Reset form fields after successful upload
