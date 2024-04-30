@@ -10,15 +10,12 @@ const UserDashboard = ({ posts }) => {
       <h2 className="user-dashboard-heading">User Dashboard</h2>
       <div className="user-dashboard-content">
         <div className="user-dashboard-section workout-section">
-          <h3 className="section-heading">Workout</h3>
           <Workout />
         </div>
         <div className="user-dashboard-section meal-plan-section">
-          <h3 className="section-heading">Meal Plan</h3>
           <MealPlan />
         </div>
         <div className="user-dashboard-section feed-section">
-          <h3 className="section-heading">Feed</h3>
           <Feed posts={posts} />
         </div>
       </div>

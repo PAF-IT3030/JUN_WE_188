@@ -4,26 +4,29 @@ import "../../Styles/PostList.css"; // Import CSS file for styling
 import { toast } from "react-toastify";
 
 const PostList = () => {
-  const [posts, setPosts] = useState([]);
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [updatedDescription, setUpdatedDescription] = useState("");
 
-  // Fetch all posts from the backend
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchImages = async () => {
       try {
         const response = await axios.get("http://localhost:8070/all-posts");
-        setPosts(response.data);
+        setImages(response.data);
+        setLoading(false);
       } catch (error) {
-        console.error("Error fetching posts:", error);
-        //toast.error("Failed to load post list!");
+        console.error("Error fetching images:", error);
+        //toast.error("You have no posts.");
       }
     };
 
-    fetchPosts();
+    fetchImages();
   }, []);
 
-  // Fetch details of a specific post when preview button is clicked
-  const handlePreview = async (id) => {
+  // Fetch details of a specific post when image is clicked
+  // Fetch details of a specific post when image is clicked
+  const handleImageClick = async (id) => {
     try {
       const response = await axios.get(
         `http://localhost:8070/display?id=${id}`
@@ -52,37 +55,62 @@ const PostList = () => {
     }
   };
 
+  const handleDescriptionUpdate = async (id) => {
+    try {
+      await axios.put(`http://localhost:8070/update-description?id=${id}`, {
+        description: updatedDescription,
+      });
+      // Update the description in the local state
+      setImages((prevImages) =>
+        prevImages.map((img) =>
+          img.id === id ? { ...img, description: updatedDescription } : img
+        )
+      );
+      toast.success("Description updated successfully!");
+    } catch (error) {
+      console.error("Error updating description:", error);
+      toast.error("Failed to update description.");
+    }
+  };
+
   return (
     <div className="post-list">
       <h2>My Posts</h2>
-      <ul className="post-list__items">
-        {posts.map((post) => (
-          <li key={post.id} className="post-list__item">
-            <h3>{post.title}</h3>
-            <p>{post.content}</p>
-            <div className="post-list__buttons">
+      {loading ? (
+        <p>Loading images...</p>
+      ) : (
+        <ul className="post-list__items">
+          {images.map((img) => (
+            <div key={img.id} className="image-item">
+              <img
+                src={`http://localhost:8070/display?id=${img.id}`}
+                alt="Uploaded"
+                className="uploaded-image"
+                onClick={() => handleImageClick(img.id)}
+              />
+              <p className="image-description">{img.description}</p>
+              <input
+                type="text"
+                value={updatedDescription}
+                onChange={(e) => setUpdatedDescription(e.target.value)}
+                className="edit-description-input"
+              />
               <button
-                className="post-list__preview-btn"
-                onClick={() => handlePreview(post.id)}
-              >
-                Preview
-              </button>
-              <button
-                className="post-list__edit-btn"
-                onClick={() => handlePreview(post.id)}
-              >
-                Edit
-              </button>
-              <button
-                className="post-list__delete-btn"
-                onClick={() => handleDelete(post.id)}
+                onClick={() => handleDelete(img.id)}
+                className="delete-button"
               >
                 Delete
               </button>
+              <button
+                onClick={() => handleDescriptionUpdate(img.id)}
+                className="update-description-button"
+              >
+                Update Description
+              </button>
             </div>
-          </li>
-        ))}
-      </ul>
+          ))}
+        </ul>
+      )}
       {selectedPost && (
         <div className="post-preview">
           <h2>Post Preview</h2>

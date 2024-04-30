@@ -33,7 +33,6 @@ const AllPosts = () => {
           img.id === id ? { ...img, description: updatedDescription } : img
         )
       );
-      toast.success("Description updated successfully.");
     } catch (error) {
       console.error("Error updating description:", error);
       toast.error("Failed to update description.");
@@ -54,6 +53,13 @@ const AllPosts = () => {
 
   return (
     <div className="all-posts-container">
+      {/* ///////////////////////////////////////////
+      <button
+        className="post-list__preview-btn"
+        onClick={() => handlePreview(post.id)}
+      >
+        Preview
+      </button> */}
       <h2>All Posts</h2>
       {loading ? (
         <p>Loading images...</p>
