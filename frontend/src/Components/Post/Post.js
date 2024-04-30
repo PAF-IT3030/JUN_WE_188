@@ -4,7 +4,6 @@ import "../../Styles/PostList.css"; // Import CSS file for styling
 import { toast } from "react-toastify";
 
 const PostList = () => {
-  const [setImages] = useState([]);
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
 
