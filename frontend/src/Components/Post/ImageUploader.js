@@ -41,7 +41,6 @@ const ImageUploader = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-      toast.success(`Post uploaded successfully!`);
       window.location.reload();
 
       console.log("Image uploaded successfully. Image ID:", response.data);
