@@ -8,6 +8,8 @@ import Register from "./Components/Authentication/Register";
 import Profile from "./Components/Profile/Profile";
 import ProfileEdit from "./Components/ProfileEdit/ProfileEdit";
 import Post from "./Components/Post/Post";
+import Allpost from "./Components/Post/AllPosts";
+import ImageUploader from "./Components/Post/ImageUploader";
 import Comment from "./Components/Comment/Comment";
 import CommentsList from "./Components/Comment/CommentsList";
 import Footer from "./Components/Footer/Footer";
@@ -28,7 +30,7 @@ function Layout({ children }) {
   const showHeaderFooterPaths = [
     "/userDashboard",
     "/profile",
-    "/post",
+    "/posts",
     "/comment",
     "/commentsList",
     "/mealPlan",
@@ -36,6 +38,8 @@ function Layout({ children }) {
     "/mealPlanUpload",
     "/workout",
     "/feed",
+    "/imageUploader",
+    "/allpost",
   ];
 
   // Check if the current path is included in the array
@@ -61,7 +65,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/userDashboard" element={<UserDashboard />} />
           <Route path="/Profile" element={<Profile />} />
-          <Route path="/post" element={<Post />} />
+          <Route path="/posts" element={<Post />} />
           <Route path="/comment" element={<Comment />} />
           <Route path="/commentsList" element={<CommentsList />} />
           <Route path="/mealPlan" element={<MealPlan />} />
@@ -69,6 +73,8 @@ function App() {
           <Route path="/mealPlanUpload" element={<MealPlanUpload />} />
           <Route path="/workout" element={<Workout />} />
           <Route path="/feed" element={<Feed />} />
+          <Route path="/imageUploader" element={<ImageUploader />} />
+          <Route path="/allpost" element={<Allpost />} />
         </Routes>
       </Layout>
     </BrowserRouter>

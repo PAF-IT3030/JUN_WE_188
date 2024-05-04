@@ -1,5 +1,6 @@
 package com.example.server.controller;
 
+import com.example.server.DTO.PostDTO;
 import com.example.server.model.Image;
 import com.example.server.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.rowset.serial.SerialBlob;
@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class ClientController {
@@ -148,15 +149,20 @@ public class ClientController {
         return ResponseEntity.notFound().build();
     }
 
+
     @GetMapping("/all-posts")
-    public ResponseEntity<List<Image>> getAllPosts() {
-        List<Image> images = imageService.viewAll();
-        if (!images.isEmpty()) {
-            return ResponseEntity.ok(images);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+public ResponseEntity<List<PostDTO>> getAllPosts() {
+    List<Image> images = imageService.viewAll();
+    if (!images.isEmpty()) {
+        List<PostDTO> posts = images.stream()
+                .map(image -> new PostDTO(image.getId(), image.getImage(), image.getDescription()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(posts);
+    } else {
+        return ResponseEntity.notFound().build();
     }
+}
+
 
 }
 
