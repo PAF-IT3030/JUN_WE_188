@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.rowset.serial.SerialBlob;
@@ -28,7 +27,7 @@ public class WorkoutController {
     private final ImageService imageService;
 
     @Autowired
-    public WorkoutController(ImageService imageService) {
+    public ClientController(ImageService imageService) {
         this.imageService = imageService;
     }
 
@@ -70,15 +69,12 @@ public class WorkoutController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Long> addImagePost(@RequestParam("image") MultipartFile file,
-                                             @RequestParam("title") String title,
-                                             @RequestParam("description") String description) {
+    public ResponseEntity<Long> addImagePost(@RequestParam("image") MultipartFile file, @RequestParam("description") String description) {
         try {
             byte[] bytes = file.getBytes();
             Blob blob = new SerialBlob(bytes);
             Image image = new Image();
             image.setImage(blob);
-            image.setTitle(title);
             image.setDescription(description);
             imageService.create(image);
             return ResponseEntity.ok(image.getId());
@@ -136,6 +132,7 @@ public class WorkoutController {
         public void setDescription(String description) {
             this.description = description;
         }
+
     }
 
     @DeleteMapping("/delete-post/{id}")
@@ -152,16 +149,21 @@ public class WorkoutController {
         return ResponseEntity.notFound().build();
     }
 
+
     @GetMapping("/all-posts")
-    public ResponseEntity<List<PostDTO>> getAllPosts() {
-        List<Image> images = imageService.viewAll();
-        if (!images.isEmpty()) {
-            List<PostDTO> posts = images.stream()
-                    .map(image -> new PostDTO(image.getId(), image.getImage(), image.getDescription()))
-                    .collect(Collectors.toList());
-            return ResponseEntity.ok(posts);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+public ResponseEntity<List<PostDTO>> getAllPosts() {
+    List<Image> images = imageService.viewAll();
+    if (!images.isEmpty()) {
+        List<PostDTO> posts = images.stream()
+                .map(image -> new PostDTO(image.getId(), image.getImage(), image.getDescription()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(posts);
+    } else {
+        return ResponseEntity.notFound().build();
     }
 }
+
+
+}
+
+
