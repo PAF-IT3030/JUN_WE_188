@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../../Styles/ImageUploader.css"; // Import CSS file for styling
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload, faTrash } from "@fortawesome/free-solid-svg-icons";
+import "../../Styles/ImageUploader.css"; // Import CSS file for styling
 
 const ImageUploader = () => {
   const [file, setFile] = useState(null);
@@ -9,24 +11,20 @@ const ImageUploader = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [previewUrl, setPreviewUrl] = useState("");
-
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
     setPreviewUrl(URL.createObjectURL(selectedFile));
   };
-
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
   };
-
   const handleClear = () => {
     window.location.reload();
     setFile(null);
     setDescription("");
     setPreviewUrl("");
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsUploading(true);
@@ -34,14 +32,12 @@ const ImageUploader = () => {
       const formData = new FormData();
       formData.append("image", file);
       formData.append("description", description);
-
       // Make POST request to backend API
       const response = await axios.post("http://localhost:8070/add", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      toast.success(`Post uploaded successfully!`);
       window.location.reload();
 
       console.log("Image uploaded successfully. Image ID:", response.data);
@@ -54,7 +50,6 @@ const ImageUploader = () => {
     }
     setIsUploading(false);
   };
-
   return (
     <div className="image-uploader-container">
       <h2 className="title">Upload Image</h2>
@@ -87,10 +82,11 @@ const ImageUploader = () => {
             className="submit-button"
             disabled={isUploading}
           >
+            <FontAwesomeIcon icon={faUpload} />{" "}
             {isUploading ? "Uploading..." : "Upload"}
           </button>
           <button type="button" className="clear-button" onClick={handleClear}>
-            Clear
+            <FontAwesomeIcon icon={faTrash} /> Clear
           </button>
         </div>
         {uploadError && <div className="error-message">{uploadError}</div>}
@@ -98,5 +94,4 @@ const ImageUploader = () => {
     </div>
   );
 };
-
 export default ImageUploader;

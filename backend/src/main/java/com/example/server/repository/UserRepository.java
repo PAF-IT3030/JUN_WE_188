@@ -1,9 +1,9 @@
-// package com.example.server.repository;
+package com.example.server.repository;
 
-// import com.example.server.model.User;
-// import org.springframework.data.jpa.repository.JpaRepository;
+import com.example.server.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 
-// public interface UserRepository extends JpaRepository<User, Long> {
-//     User findByUsername(String username);
-// }
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUsername(String username);
+}
