@@ -1,38 +1,47 @@
-.workout-container {
+.add-activity-form {
+  max-width: 400px;
+  margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f3f3f3;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  background-color: #f9f9f9;
 }
 
-.workout-heading {
-  font-size: 28px;
-  color: #333;
+.form-group {
   margin-bottom: 20px;
 }
 
-.workout-input {
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+textarea,
+input[type="file"] {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  box-sizing: border-box;
+  padding: 8px;
   font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
 }
 
-.workout-button {
-  padding: 12px 24px;
-  background-color: #002650ad;
+textarea {
+  resize: vertical;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
   color: #fff;
   border: none;
-  border-radius: 6px;
+  border-radius: 3px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s ease;
 }
 
-.workout-button:hover {
+button:hover {
   background-color: #0056b3;
 }

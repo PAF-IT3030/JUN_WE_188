@@ -1,95 +1,63 @@
 import React, { useState } from "react";
-import "../../Styles/Profile.css";
+import axios from "axios";
+import "../../Styles/Workout.css";
 
-const Profile = () => {
-  const [profilePicture, setProfilePicture] = useState(null);
-  const [coverPhoto, setCoverPhoto] = useState(null);
-  const [bio, setBio] = useState("");
-  const [posts, setPosts] = useState([]);
-  const [newPost, setNewPost] = useState("");
+const AddFitnessActivityForm = () => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState(null);
 
-  const handleProfilePictureUpload = (e) => {
-    const file = e.target.files[0];
-    setProfilePicture(file);
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const handleCoverPhotoUpload = (e) => {
-    const file = e.target.files[0];
-    setCoverPhoto(file);
-  };
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("image", image);
 
-  const handleBioChange = (e) => {
-    setBio(e.target.value);
-  };
-
-  const handlePostChange = (e) => {
-    setNewPost(e.target.value);
-  };
-
-  const handleAddPost = () => {
-    if (newPost.trim()) {
-      setPosts([...posts, newPost.trim()]);
-      setNewPost("");
+    try {
+      await axios.post("http://localhost:8070/create", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("Activity added successfully!");
+      setName("");
+      setDescription("");
+      setImage(null);
+    } catch (error) {
+      console.error("Error adding activity:", error);
+      alert("Failed to add activity!");
     }
   };
 
   return (
-    <div className="profile-container">
-      <div className="profile-header">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleCoverPhotoUpload}
-          className="profile-cover-photo-upload"
-        />
-        <img
-          src={coverPhoto ? URL.createObjectURL(coverPhoto) : ""}
-          alt="Cover Photo"
-          className="profile-cover-photo"
-        />
-        <div className="profile-picture-container">
+    <div className="add-activity-form">
+      <h2>Add New Fitness Activity</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Name:</label>
           <input
-            type="file"
-            accept="image/*"
-            onChange={handleProfilePictureUpload}
-            className="profile-picture-upload"
-          />
-          <img
-            src={profilePicture ? URL.createObjectURL(profilePicture) : ""}
-            alt="Profile Picture"
-            className="profile-picture"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
-      </div>
-      <div className="profile-bio">
-        <textarea
-          placeholder="Add your bio..."
-          value={bio}
-          onChange={handleBioChange}
-          className="profile-bio-input"
-        />
-      </div>
-      <div className="profile-posts">
-        <h3>Posts</h3>
-        {posts.map((post, index) => (
-          <div key={index} className="profile-post">
-            <p>{post}</p>
-          </div>
-        ))}
-        <div className="profile-new-post">
+        <div className="form-group">
+          <label>Description:</label>
           <textarea
-            placeholder="What's on your mind?"
-            value={newPost}
-            onChange={handlePostChange}
-            className="profile-new-post-input"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
-          <button onClick={handleAddPost} className="profile-post-button">
-            Post
-          </button>
         </div>
-      </div>
+        <div className="form-group">
+          <label>Image:</label>
+          <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+        </div>
+        <button type="submit">Add</button>
+      </form>
     </div>
   );
 };
 
-export default Profile;
+export default AddFitnessActivityForm;
