@@ -1,5 +1,3 @@
-//Propeties/Entities
-
 package com.example.server.model;
 
 import jakarta.persistence.*;
