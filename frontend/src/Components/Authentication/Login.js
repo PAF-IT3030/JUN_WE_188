@@ -29,29 +29,31 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <h3 className="login-heading">Login</h3>
-      <input
-        type="text"
-        className="login-input"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        className="login-input"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button className="login-button" onClick={handleLogin}>
-        Login
-      </button>
-      <p className="register-link">
-        Don't have an account?{" "}
-        <span onClick={() => navigate("/register")}>Register</span>
-      </p>
+    <div className="Login">
+      <div className="login-container">
+        <h3 className="login-heading">Login</h3>
+        <input
+          type="text"
+          className="login-input"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="password"
+          className="login-input"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button className="login-button" onClick={handleLogin}>
+          Login
+        </button>
+        <p className="register-link">
+          Don't have an account?{" "}
+          <span onClick={() => navigate("/register")}>Register</span>
+        </p>
+      </div>
     </div>
   );
 };
