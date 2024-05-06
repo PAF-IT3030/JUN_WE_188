@@ -1,13 +1,14 @@
 /* Post List Styles */
 .post-list-container {
   padding: 20px;
-  background-color: rgb(233, 233, 233);
+  background-color: rgba(118, 109, 109, 0.255);
   border: 1px solid #575757;
   border-radius: 8px;
 }
 
 .post-list-heading {
-  font-size: 24px;
+  font-family: monospace;
+  font-size: 26px;
   margin-bottom: 20px;
 }
 
@@ -154,5 +155,68 @@
   background-color: #57575700;
   border: 0.1px solid rgba(0, 0, 0, 0);
   size: 50px;
-  padding: 50px;
+  padding-left: 50px;
+}
+
+/* Comment Styles */
+.comments-section {
+  margin-top: 20px;
+}
+
+.commentcontainer {
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.commentcontainer p {
+  margin: 5px 0;
+}
+
+.commentcontainer-author {
+  font-weight: bold;
+}
+
+.commentcontainer-content {
+  margin-top: 5px;
+}
+
+.submit-comment-button {
+  background-color: #cac715;
+  color: #454545;
+  border: none;
+  padding: 5px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.submit-comment-button:hover {
+  background-color: #817401;
+}
+
+/* Like button, Comment area, and Send button alignment */
+.like-comment-container {
+  display: flex;
+  align-items: center;
+}
+
+.like-button,
+.submit-comment-button {
+  margin-right: 5px;
+}
+
+.like-button {
+  margin-left: -30px;
+  color: #ffffff; /* Default color */
+  background-color: transparent; /* Transparent background */
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.3s, background-color 0.3s; /* Transition effect */
+}
+
+.like-button:hover {
+  color: #ba0202; /* Change text color to white on hover */
 }

@@ -1,12 +1,29 @@
+.imageuploder {
+  background-image: url("https://wallpapercave.com/wp/wp7578959.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh; /* Set height to fill the entire viewport */
+  display: flex;
+  justify-content: center; /* Center contents horizontally */
+  align-items: center; /* Center contents vertically */
+  margin-top: -100px;
+}
 .image-uploader-container {
   max-width: 400px;
-  margin-left: 38%;
+  margin-left: 35%;
   margin-bottom: 100px;
-  margin-top: -50px;
+  margin-top: 2%;
+  padding: 50px;
+  background-image: linear-gradient(to bottom right, #0f0c29, #0f0f0f);
+  border-radius: 10px;
+  box-shadow: 0 8px 15px rgba(255, 255, 255, 0.3); /* Realistic white shadow */
 }
 
 .title {
+  font-family: monospace;
   font-size: 1.5rem;
+  color: #ffffff;
   margin-bottom: 1rem;
 }
 
@@ -20,12 +37,14 @@ input[type="file"],
 .clear-button {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid #434343;
   border-radius: 5px;
+  text-decoration: none;
 }
 
 input[type="file"] {
-  margin-top: 0.5rem;
+  padding-right: 10px;
+  padding-left: 10px;
 }
 
 .preview-image {
@@ -41,7 +60,8 @@ input[type="file"] {
 
 .submit-button,
 .clear-button {
-  background-color: #007bff;
+  margin-top: 30px;
+  background-color: #958400ad;
   color: #fff;
   border: none;
   cursor: pointer;
@@ -53,10 +73,23 @@ input[type="file"] {
 }
 
 .clear-button {
-  background-color: #dc3545;
+  background-color: #780000;
 }
 
 .error-message {
   color: red;
   margin-top: 0.5rem;
+  margin-left: 10px;
+}
+
+#ssss {
+  color: #fff;
+}
+
+.description-input {
+  background-color: #7d7d81;
+}
+
+.descriptioncolor {
+  color: white;
 }

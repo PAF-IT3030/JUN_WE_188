@@ -1,46 +1,61 @@
 import React, { useState } from "react";
-import axios from "axios";
+import "../../Styles/Login.css"; // Example path to the CSS file
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const LoginForm = () => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:8070/login", {
-        username,
-        password,
-      });
-      console.log("Login successful:", response.data);
-      // Redirect to dashboard or display a success message
-    } catch (error) {
-      console.error("Login failed:", error);
-      // Display an error message to the user
+  const handleLogin = () => {
+    // Check if username and password are not empty
+    if (username.trim() === "" || password.trim() === "") {
+      console.log("Please enter your details.");
+      toast.error("Please fill in all fields.");
+      return; // Exit the function early if username or password is empty
+    }
+
+    // Here you can perform your login authentication logic, such as sending a request to a backend server
+    if (username === "li" && password === "123") {
+      console.log("Login successful!");
+      toast.success("Login successful!");
+      // Redirect to dashboard upon successful login
+      navigate("/userDashboard");
+    } else {
+      console.log("Invalid username or password. Please try again.");
+      toast.error("Invalid username or password. Please try again.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Username:
+    <div className="Login">
+      <div className="login-container">
+        <h3 className="login-heading">Login</h3>
         <input
           type="text"
+          className="login-input"
+          placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-      </label>
-      <label>
-        Password:
         <input
           type="password"
+          className="login-input"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-      </label>
-      <button type="submit">Login</button>
-    </form>
+        <button className="login-button" onClick={handleLogin}>
+          Login
+        </button>
+        <p className="register-link">
+          Don't have an account?{" "}
+          <span onClick={() => navigate("/register")}>Register</span>
+        </p>
+      </div>
+    </div>
   );
 };
 
-export default LoginForm;
+export default Login;

@@ -1,13 +1,14 @@
 /* Feed.css */
 .feed-container {
-  background-color: #f9f9f9;
+  background-color: #f9f9f920;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
 }
 
 .feed-heading {
-  font-size: 24px;
+  font-family: monospace;
+  font-size: 26px;
   font-weight: bold;
   margin-bottom: 20px;
 }

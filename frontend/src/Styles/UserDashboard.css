@@ -11,7 +11,8 @@
 /* User dashboard heading */
 .user-dashboard-heading {
   font-size: 24px;
-  color: #333;
+  color: #2c2c2c;
+  font-family: monospace;
   margin-bottom: 20px;
 }
 
@@ -27,7 +28,7 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #0000005d;
 }
 
 /* Section heading styles */
