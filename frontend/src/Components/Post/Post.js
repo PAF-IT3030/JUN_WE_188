@@ -153,26 +153,28 @@ const PostList = () => {
                 onClick={() => handleImageClick(img.id)}
               />
               <p className="post-description">{img.description}</p>
-
               {/* Comment input field */}
-              <input
-                className="commentcontainer"
-                type="text"
-                placeholder="Add a comment..."
-                value={commentInput}
-                onChange={(e) => setCommentInput(e.target.value)}
-              />
-              {/* Button to submit the comment */}
-              <button
-                className="submit-comment-button"
-                onClick={handleCommentSubmit}
-              >
-                <FontAwesomeIcon icon={faPaperPlane} /> send
-              </button>
-              {/* Like button */}
-              <button className="like-button" onClick={handleLike}>
-                <FontAwesomeIcon icon={faHeart} /> Like
-              </button>
+              <div className="like-comment-container">
+                <input
+                  className="commentcontainer"
+                  type="text"
+                  placeholder="Add a comment..."
+                  value={commentInput}
+                  onChange={(e) => setCommentInput(e.target.value)}
+                />
+                {/* Button to submit the comment */}
+                <button
+                  className="submit-comment-button"
+                  onClick={handleCommentSubmit}
+                >
+                  <FontAwesomeIcon icon={faPaperPlane} />
+                </button>
+                {/* Like button */}
+                <button className="like-button" onClick={handleLike}>
+                  <FontAwesomeIcon icon={faHeart} />
+                </button>
+              </div>
+
               {/* Display comments */}
               <div className="comments-section">
                 <h4>Comments</h4>
