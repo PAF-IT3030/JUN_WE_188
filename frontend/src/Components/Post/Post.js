@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faEdit,
+  faTimes,
+  faPaperPlane,
+} from "@fortawesome/free-solid-svg-icons";
 import "../../Styles/PostList.css"; // Import CSS file for styling
 
 const PostList = () => {
@@ -145,7 +150,7 @@ const PostList = () => {
                 className="submit-comment-button"
                 onClick={handleCommentSubmit}
               >
-                Submit Comment
+                <FontAwesomeIcon icon={faPaperPlane} /> Submit Comment
               </button>
               {/* Display comments */}
               <div className="comments-section">
@@ -161,6 +166,7 @@ const PostList = () => {
           ))}
         </div>
       )}
+
       {selectedImage && (
         <div className="popup-container active">
           <div className="popup-content active">
