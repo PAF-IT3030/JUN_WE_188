@@ -1,131 +1,131 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../../Styles/ImageUploader.css";
-import { toast } from "react-toastify";
+import "../../Styles/Workout.css";
 
-const ImageUploader = () => {
-  const [file, setFile] = useState(null);
+function Workout() {
+  const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadError, setUploadError] = useState("");
-  const [previewUrl, setPreviewUrl] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
+  const [posts, setPosts] = useState([]);
 
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setFile(selectedFile);
-    setPreviewUrl(URL.createObjectURL(selectedFile));
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = () => {
+    axios
+      .get("http://localhost:8070/workoutall-posts")
+      .then((response) => {
+        setPosts(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching posts:", error);
+      });
   };
 
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
+  const handleImageChange = (event) => {
+    setImage(event.target.files[0]);
   };
 
-  const handleClear = () => {
-    window.location.reload();
-    setFile(null);
-    setDescription("");
-    setPreviewUrl("");
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-      formData.append("description", description);
-      const response = await axios.post(
-        "http://localhost:8070/workoutadd",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+  const addPost = () => {
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("description", description);
+
+    axios
+      .post("http://localhost:8070/workoutadd", formData)
+      .then((response) => {
+        if (response.data && response.data !== -1) {
+          fetchPosts();
+        } else {
+          alert("Failed to add post!");
         }
-      );
-      toast.success(`Post uploaded successfully!`);
-      window.location.reload();
-      console.log("Image uploaded successfully. Image ID:", response.data);
-      handleClear();
-    } catch (error) {
-      toast.error("Failed to upload Post...");
-      console.error("Error uploading image:", error);
-      setUploadError("Error uploading image. Please try again.");
-    }
-    setIsUploading(false);
+      })
+      .catch((error) => {
+        console.error("Error adding post:", error);
+      });
   };
 
-  const handleOpenPopup = () => {
-    setShowPopup(true);
+  const deletePost = (id) => {
+    axios
+      .delete(`http://localhost:8070/workoutdelete-post/${id}`)
+      .then((response) => {
+        if (response.status === 200) {
+          fetchPosts();
+        } else {
+          alert("Failed to delete post!");
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting post:", error);
+      });
   };
 
-  const handleClosePopup = () => {
-    setShowPopup(false);
+  const editPost = (id, newDescription) => {
+    axios
+      .put(`http://localhost:8070/workoutupdate-description?id=${id}`, {
+        description: newDescription,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          fetchPosts();
+        } else {
+          alert("Failed to update description!");
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating description:", error);
+      });
   };
 
   return (
-    <div className="image-uploader-container">
-      <h2 className="title">Upload Image</h2>
-      <button onClick={handleOpenPopup} className="add-button">
-        Add
-      </button>
+    <div className="workout">
+      <h1>Workout Posts</h1>
 
-      {showPopup && (
-        <div className="popup">
-          <div className="popup-content">
-            <span className="close-button" onClick={handleClosePopup}>
-              &times;
-            </span>
-            <h2>Upload Image</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="image">Choose Image:</label>
-                <input
-                  type="file"
-                  id="image"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-              </div>
-              {previewUrl && (
-                <img src={previewUrl} alt="Preview" className="preview-image" />
-              )}
-              <div className="form-group">
-                <label htmlFor="description">Description:</label>
-                <input
-                  type="text"
-                  id="description"
-                  className="description-input"
-                  value={description}
-                  onChange={handleDescriptionChange}
-                />
-              </div>
-              <div className="button-group">
-                <button
-                  type="submit"
-                  className="submit-button"
-                  disabled={isUploading}
-                >
-                  {isUploading ? "Uploading..." : "Upload"}
-                </button>
-                <button
-                  type="button"
-                  className="clear-button"
-                  onClick={handleClear}
-                >
-                  Clear
-                </button>
-              </div>
-              {uploadError && (
-                <div className="error-message">{uploadError}</div>
-              )}
-            </form>
+      {/* Form to add a new post */}
+      <div className="form-container">
+        <input
+          type="file"
+          onChange={handleImageChange}
+          className="file-input"
+        />
+        <textarea
+          value={description}
+          onChange={handleDescriptionChange}
+          placeholder="Enter description"
+          className="description-input"
+        />
+        <button onClick={addPost} className="add-button">
+          Add Post
+        </button>
+      </div>
+
+      <br />
+
+      {/* Display all posts */}
+      <div className="posts-container">
+        {posts.map((post) => (
+          <div key={post.id} className="post">
+            <img src={`data:image/jpeg;base64,${post.image}`} alt="Workout" />
+            <p>{post.description}</p>
+            <div>
+              <button
+                onClick={() =>
+                  editPost(post.id, prompt("Enter new description:"))
+                }
+              >
+                Edit
+              </button>
+              <button onClick={() => deletePost(post.id)}>Delete</button>
+            </div>
           </div>
-        </div>
-      )}
+        ))}
+      </div>
     </div>
   );
-};
+}
 
-export default ImageUploader;
+export default Workout;
