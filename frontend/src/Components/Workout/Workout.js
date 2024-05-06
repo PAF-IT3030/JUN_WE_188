@@ -1,63 +1,131 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../../Styles/Workout.css";
+import "../../Styles/ImageUploader.css";
+import { toast } from "react-toastify";
 
-const AddFitnessActivityForm = () => {
-  const [name, setName] = useState("");
+const ImageUploader = () => {
+  const [file, setFile] = useState(null);
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+    setPreviewUrl(URL.createObjectURL(selectedFile));
+  };
+
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
+
+  const handleClear = () => {
+    window.location.reload();
+    setFile(null);
+    setDescription("");
+    setPreviewUrl("");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("image", image);
-
+    setIsUploading(true);
     try {
-      await axios.post("http://localhost:8070/create", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      alert("Activity added successfully!");
-      setName("");
-      setDescription("");
-      setImage(null);
+      const formData = new FormData();
+      formData.append("image", file);
+      formData.append("description", description);
+      const response = await axios.post(
+        "http://localhost:8070/workoutadd",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      toast.success(`Post uploaded successfully!`);
+      window.location.reload();
+      console.log("Image uploaded successfully. Image ID:", response.data);
+      handleClear();
     } catch (error) {
-      console.error("Error adding activity:", error);
-      alert("Failed to add activity!");
+      toast.error("Failed to upload Post...");
+      console.error("Error uploading image:", error);
+      setUploadError("Error uploading image. Please try again.");
     }
+    setIsUploading(false);
+  };
+
+  const handleOpenPopup = () => {
+    setShowPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
   };
 
   return (
-    <div className="add-activity-form">
-      <h2>Add New Fitness Activity</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+    <div className="image-uploader-container">
+      <h2 className="title">Upload Image</h2>
+      <button onClick={handleOpenPopup} className="add-button">
+        Add
+      </button>
+
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <span className="close-button" onClick={handleClosePopup}>
+              &times;
+            </span>
+            <h2>Upload Image</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="image">Choose Image:</label>
+                <input
+                  type="file"
+                  id="image"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </div>
+              {previewUrl && (
+                <img src={previewUrl} alt="Preview" className="preview-image" />
+              )}
+              <div className="form-group">
+                <label htmlFor="description">Description:</label>
+                <input
+                  type="text"
+                  id="description"
+                  className="description-input"
+                  value={description}
+                  onChange={handleDescriptionChange}
+                />
+              </div>
+              <div className="button-group">
+                <button
+                  type="submit"
+                  className="submit-button"
+                  disabled={isUploading}
+                >
+                  {isUploading ? "Uploading..." : "Upload"}
+                </button>
+                <button
+                  type="button"
+                  className="clear-button"
+                  onClick={handleClear}
+                >
+                  Clear
+                </button>
+              </div>
+              {uploadError && (
+                <div className="error-message">{uploadError}</div>
+              )}
+            </form>
+          </div>
         </div>
-        <div className="form-group">
-          <label>Description:</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <label>Image:</label>
-          <input type="file" onChange={(e) => setImage(e.target.files[0])} />
-        </div>
-        <button type="submit">Add</button>
-      </form>
+      )}
     </div>
   );
 };
 
-export default AddFitnessActivityForm;
+export default ImageUploader;
