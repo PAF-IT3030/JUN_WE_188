@@ -25,7 +25,7 @@
 }
 
 .workout-plan-upload-button {
-  background-color: #4caf50;
+  background-color: #958400ad;
   color: white;
   padding: 12px 24px;
   border: none;
@@ -35,7 +35,7 @@
 }
 
 .workout-plan-upload-button:hover {
-  background-color: #45a049;
+  background-color: #c8b101ad;
 }
 
 .error-message {
