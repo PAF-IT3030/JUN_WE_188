@@ -1,5 +1,5 @@
 package com.example.server.entity;
-
+import javax.persistence.Entity;
 import javax.persistence.*;
 
 @Entity
