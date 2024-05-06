@@ -10,6 +10,8 @@ const PostList = () => {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
   const [description, setDescription] = useState("");
+  const [commentInput, setCommentInput] = useState(""); // State variable for comment input
+  const [comments, setComments] = useState([]); // State variable for comments
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -19,7 +21,7 @@ const PostList = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching images:", error);
-        //toast.error("You have no posts.");
+        toast.error("Failed to fetch posts.");
       }
     };
 
@@ -33,6 +35,7 @@ const PostList = () => {
       );
       setSelectedImage({ ...response.data, id });
       setDescription(response.data.description);
+      fetchComments(id); // Fetch comments for the selected post
     } catch (error) {
       console.error("Error fetching post details:", error);
       toast.error(`Failed to display post ${id}!`);
@@ -84,6 +87,36 @@ const PostList = () => {
     }
   };
 
+  const fetchComments = async (postId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8070/comments/${postId}`
+      );
+      setComments(response.data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      toast.error("Failed to fetch comments.");
+    }
+  };
+
+  const handleCommentSubmit = async () => {
+    try {
+      // Make a POST request to save the comment to the database
+      const response = await axios.post(
+        `http://localhost:8070/add-comment/${selectedImage.id}`,
+        { comment: commentInput }
+      );
+      // Update the state with the new comment
+      setComments([...comments, response.data]);
+      // Clear the comment input field
+      setCommentInput("");
+      toast.success("Comment added successfully!");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      toast.error("Failed to add comment.");
+    }
+  };
+
   return (
     <div className="post-list-container">
       <h2 className="post-list-heading">My Posts</h2>
@@ -99,8 +132,31 @@ const PostList = () => {
                 className="post-image"
                 onClick={() => handleImageClick(img.id)}
               />
-
               <p className="post-description">{img.description}</p>
+              {/* Comment input field */}
+              <input
+                type="text"
+                placeholder="Add a comment..."
+                value={commentInput}
+                onChange={(e) => setCommentInput(e.target.value)}
+              />
+              {/* Button to submit the comment */}
+              <button
+                className="submit-comment-button"
+                onClick={handleCommentSubmit}
+              >
+                Submit Comment
+              </button>
+              {/* Display comments */}
+              <div className="comments-section">
+                <h3>Comments</h3>
+                {comments.map((comment) => (
+                  <div key={comment._id} className="comment">
+                    <p>{comment.text}</p>
+                    <p>By: {comment.author}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -108,9 +164,6 @@ const PostList = () => {
       {selectedImage && (
         <div className="popup-container active">
           <div className="popup-content active">
-            <button className="close-popup" onClick={handleClosePreview}>
-              <FontAwesomeIcon icon={faTimes} /> Close Preview
-            </button>
             <img
               src={`http://localhost:8070/display?id=${selectedImage.id}`}
               alt="Selected"
@@ -120,6 +173,7 @@ const PostList = () => {
               className="description-textarea"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              placeholder="Update your Description here.."
             />
             <button
               className="update-description-button"
@@ -128,7 +182,10 @@ const PostList = () => {
               <FontAwesomeIcon icon={faEdit} /> Update Description
             </button>
             <button className="delete-button" onClick={handleDelete}>
-              <FontAwesomeIcon icon={faTrash} /> Delete
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+            <button className="close-popup" onClick={handleClosePreview}>
+              <FontAwesomeIcon icon={faTimes} /> Close
             </button>
           </div>
         </div>
