@@ -101,7 +101,7 @@ const PostList = () => {
       setComments(response.data);
     } catch (error) {
       console.error("Error fetching comments:", error);
-      toast.error("Failed to fetch comments.");
+      // toast.error("Failed to fetch comments.");
     }
   };
 

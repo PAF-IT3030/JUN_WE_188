@@ -13,10 +13,10 @@ const UserDashboard = ({ posts }) => {
           <Workout />
         </div>
         <div className="user-dashboard-section meal-plan-section">
-          <MealPlan />
+          <Feed posts={posts} />
         </div>
         <div className="user-dashboard-section feed-section">
-          <Feed posts={posts} />
+          <MealPlan />
         </div>
       </div>
     </div>
