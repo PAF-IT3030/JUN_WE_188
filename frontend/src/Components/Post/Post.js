@@ -7,6 +7,7 @@ import {
   faEdit,
   faTimes,
   faPaperPlane,
+  faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import "../../Styles/PostList.css"; // Import CSS file for styling
 
@@ -122,6 +123,20 @@ const PostList = () => {
     }
   };
 
+  const handleLike = async () => {
+    try {
+      // Perform the like operation here (e.g., send a request to the server)
+      // Example:
+      // await axios.post(`http://localhost:8070/like/${selectedImage.id}`);
+      // Update the UI to reflect the like action (e.g., increase like count)
+      // Example:
+      // setLikes(likes + 1);
+      // Display a success message
+    } catch (error) {
+      console.error("Error liking post:", error);
+    }
+  };
+
   return (
     <div className="post-list-container">
       <h2 className="post-list-heading">My Posts</h2>
@@ -138,8 +153,10 @@ const PostList = () => {
                 onClick={() => handleImageClick(img.id)}
               />
               <p className="post-description">{img.description}</p>
+
               {/* Comment input field */}
               <input
+                className="commentcontainer"
                 type="text"
                 placeholder="Add a comment..."
                 value={commentInput}
@@ -150,7 +167,11 @@ const PostList = () => {
                 className="submit-comment-button"
                 onClick={handleCommentSubmit}
               >
-                <FontAwesomeIcon icon={faPaperPlane} /> Submit Comment
+                <FontAwesomeIcon icon={faPaperPlane} /> send
+              </button>
+              {/* Like button */}
+              <button className="like-button" onClick={handleLike}>
+                <FontAwesomeIcon icon={faHeart} /> Like
               </button>
               {/* Display comments */}
               <div className="comments-section">

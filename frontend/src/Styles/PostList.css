@@ -162,23 +162,22 @@
   margin-top: 20px;
 }
 
-.comment {
+.commentcontainer {
   background-color: #f2f2f2;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 9px;
 }
 
-.comment p {
+.commentcontainer p {
   margin: 5px 0;
 }
 
-.comment-author {
+.commentcontainer-author {
   font-weight: bold;
 }
 
-.comment-content {
+.commentcontainer-content {
   margin-top: 5px;
 }
 
@@ -194,4 +193,17 @@
 
 .submit-comment-button:hover {
   background-color: #0056b3;
+}
+
+.like-button {
+  color: #ffffff; /* Default color */
+  background-color: transparent; /* Transparent background */
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.3s, background-color 0.3s; /* Transition effect */
+}
+
+.like-button:hover {
+  color: #ba0202; /* Change text color to white on hover */
 }
