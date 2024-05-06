@@ -20,7 +20,6 @@ const Feed = ({ posts }) => {
 
   return (
     <div className="feed-container">
-      <h2 className="feed-heading">Feed</h2>
       <div className="feed-content">
         {/* Map through the hard-coded posts array */}
         {hardCodedPosts.map((post) => (

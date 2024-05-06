@@ -155,7 +155,7 @@
   background-color: #57575700;
   border: 0.1px solid rgba(0, 0, 0, 0);
   size: 50px;
-  padding: 50px;
+  padding-left: 50px;
 }
 
 /* Comment Styles */
@@ -166,8 +166,8 @@
 .commentcontainer {
   background-color: #f2f2f2;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 5px;
+  border-radius: 6px;
+  padding: 8px;
 }
 
 .commentcontainer p {
@@ -183,7 +183,7 @@
 }
 
 .submit-comment-button {
-  background-color: #006aff;
+  background-color: #cac715;
   color: #454545;
   border: none;
   padding: 5px 20px;
@@ -193,7 +193,7 @@
 }
 
 .submit-comment-button:hover {
-  background-color: #0056b3;
+  background-color: #817401;
 }
 
 /* Like button, Comment area, and Send button alignment */
