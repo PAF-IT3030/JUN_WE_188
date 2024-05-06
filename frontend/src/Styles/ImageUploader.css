@@ -15,8 +15,9 @@
   margin-bottom: 100px;
   margin-top: 2%;
   padding: 50px;
-  background-image: linear-gradient(to bottom right, #0f0c29, #24243e);
+  background-image: linear-gradient(to bottom right, #0f0c29, #0f0f0f);
   border-radius: 10px;
+  box-shadow: 0 8px 15px rgba(255, 255, 255, 0.3); /* Realistic white shadow */
 }
 
 .title {
@@ -42,8 +43,6 @@ input[type="file"],
 }
 
 input[type="file"] {
-  padding-top: 100px;
-  padding-bottom: 100px;
   padding-right: 10px;
   padding-left: 10px;
 }
@@ -87,6 +86,10 @@ input[type="file"] {
   color: #fff;
 }
 
-.description-input{
+.description-input {
   background-color: #7d7d81;
+}
+
+.descriptioncolor {
+  color: white;
 }

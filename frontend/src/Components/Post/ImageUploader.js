@@ -56,7 +56,9 @@ const ImageUploader = () => {
         <h2 className="title">Upload Image</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="image" id="ssss">Choose Image:</label>
+            <label htmlFor="image" id="ssss">
+              Choose Image:
+            </label>
             <input
               type="file"
               id="image"
@@ -68,7 +70,9 @@ const ImageUploader = () => {
             <img src={previewUrl} alt="Preview" className="preview-image" />
           )}
           <div className="form-group">
-            <label htmlFor="description">Description:</label>
+            <label className="descriptioncolor" htmlFor="description">
+              Description:
+            </label>
             <input
               type="text"
               id="description"
