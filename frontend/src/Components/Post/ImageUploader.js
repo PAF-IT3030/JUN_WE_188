@@ -51,46 +51,52 @@ const ImageUploader = () => {
     setIsUploading(false);
   };
   return (
-    <div className="image-uploader-container">
-      <h2 className="title">Upload Image</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="image">Choose Image:</label>
-          <input
-            type="file"
-            id="image"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-        </div>
-        {previewUrl && (
-          <img src={previewUrl} alt="Preview" className="preview-image" />
-        )}
-        <div className="form-group">
-          <label htmlFor="description">Description:</label>
-          <input
-            type="text"
-            id="description"
-            className="description-input"
-            value={description}
-            onChange={handleDescriptionChange}
-          />
-        </div>
-        <div className="button-group">
-          <button
-            type="submit"
-            className="submit-button"
-            disabled={isUploading}
-          >
-            <FontAwesomeIcon icon={faUpload} />{" "}
-            {isUploading ? "Uploading..." : "Upload"}
-          </button>
-          <button type="button" className="clear-button" onClick={handleClear}>
-            <FontAwesomeIcon icon={faTrash} /> Clear
-          </button>
-        </div>
-        {uploadError && <div className="error-message">{uploadError}</div>}
-      </form>
+    <div className="imageuploder">
+      <div className="image-uploader-container">
+        <h2 className="title">Upload Image</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="image" id="ssss">Choose Image:</label>
+            <input
+              type="file"
+              id="image"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+          </div>
+          {previewUrl && (
+            <img src={previewUrl} alt="Preview" className="preview-image" />
+          )}
+          <div className="form-group">
+            <label htmlFor="description">Description:</label>
+            <input
+              type="text"
+              id="description"
+              className="description-input"
+              value={description}
+              onChange={handleDescriptionChange}
+            />
+          </div>
+          <div className="button-group">
+            <button
+              type="submit"
+              className="submit-button"
+              disabled={isUploading}
+            >
+              <FontAwesomeIcon icon={faUpload} />{" "}
+              {isUploading ? "Uploading..." : "Upload"}
+            </button>
+            <button
+              type="button"
+              className="clear-button"
+              onClick={handleClear}
+            >
+              <FontAwesomeIcon icon={faTrash} /> Clear
+            </button>
+          </div>
+          {uploadError && <div className="error-message">{uploadError}</div>}
+        </form>
+      </div>
     </div>
   );
 };
