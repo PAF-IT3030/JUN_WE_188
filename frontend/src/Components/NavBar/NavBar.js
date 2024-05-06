@@ -7,11 +7,13 @@ const NavBar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <img
-          src="https://static.vecteezy.com/system/resources/previews/011/162/083/original/fitness-sport-gym-logo-design-vector.jpg"
-          alt="Logo"
-          className="navbar-logo-img"
-        />
+        <Link to="/userDashboard" className="navbar-link">
+          <img
+            src="https://static.vecteezy.com/system/resources/previews/011/162/083/original/fitness-sport-gym-logo-design-vector.jpg"
+            alt="Logo"
+            className="navbar-logo-img"
+          />
+        </Link>
       </div>
       <ul className="navbar-list">
         <li className="navbar-item">
