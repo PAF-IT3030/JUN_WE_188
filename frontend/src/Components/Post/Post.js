@@ -149,7 +149,7 @@ const PostList = () => {
               </button>
               {/* Display comments */}
               <div className="comments-section">
-                <h3>Comments</h3>
+                <h4>Comments</h4>
                 {comments.map((comment) => (
                   <div key={comment._id} className="comment">
                     <p>{comment.text}</p>
