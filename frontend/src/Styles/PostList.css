@@ -1,13 +1,14 @@
 /* Post List Styles */
 .post-list-container {
   padding: 20px;
-  background-color: rgb(233, 233, 233);
+  background-color: rgba(118, 109, 109, 0.255);
   border: 1px solid #575757;
   border-radius: 8px;
 }
 
 .post-list-heading {
-  font-size: 24px;
+  font-family: monospace;
+  font-size: 26px;
   margin-bottom: 20px;
 }
 

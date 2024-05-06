@@ -1,11 +1,14 @@
 .image-uploader-container {
   max-width: 400px;
-  margin-left: 38%;
+  margin-left: 35%;
   margin-bottom: 100px;
   margin-top: -50px;
+  padding: 50px;
+  background-color: #3a3434;
 }
 
 .title {
+  font-family: monospace;
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }

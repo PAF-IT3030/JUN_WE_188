@@ -10,11 +10,7 @@
 }
 
 .login-container {
-  background-image: linear-gradient(
-    to bottom right,
-    rgba(136, 136, 136, 0.548),
-    rgba(142, 142, 142, 0.718)
-  );
+  background-image: linear-gradient(to bottom right, #232526, #414345);
   width: 400px;
   padding: 30px;
   border: 1px solid #050029;
@@ -28,12 +24,12 @@
   font-size: 30px;
   margin-bottom: 30px;
   text-align: center;
-  color: #1f1e33;
+  color: #b9b9bc;
 }
 
 .login-input {
   width: calc(100% - 20px);
-  padding: 15px;
+  padding: 13px;
   margin-bottom: 30px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -42,8 +38,8 @@
 }
 
 .login-button {
-  width: 100%;
-  padding: 15px;
+  width: 70%;
+  padding: 10px;
   background-color: #958400ad;
   color: white;
   border: none;

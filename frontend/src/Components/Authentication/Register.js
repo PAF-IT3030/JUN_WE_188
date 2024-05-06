@@ -41,39 +41,41 @@ const Register = () => {
   };
 
   return (
-    <div className="register-container">
-      <h3 className="register-heading">Register</h3>
-      <input
-        type="text"
-        className="register-input"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="email"
-        className="register-input"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        className="register-input"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <input
-        type="text"
-        className="register-input"
-        placeholder="Bio"
-        value={bio}
-        onChange={(e) => setBio(e.target.value)}
-      />
-      <button className="register-button" onClick={handleRegister}>
-        Register
-      </button>
+    <div className="Register">
+      <div className="register-container">
+        <h3 className="register-heading">Register</h3>
+        <input
+          type="text"
+          className="register-input"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="email"
+          className="register-input"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          className="register-input"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <input
+          type="text"
+          className="register-input"
+          placeholder="Bio"
+          value={bio}
+          onChange={(e) => setBio(e.target.value)}
+        />
+        <button className="register-button" onClick={handleRegister}>
+          Register
+        </button>
+      </div>
     </div>
   );
 };

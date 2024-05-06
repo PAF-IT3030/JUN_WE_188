@@ -1,18 +1,29 @@
+.Register {
+  background-image: url("https://img.freepik.com/premium-photo/gym-equipment-barbell-fitness-studio-ai_894067-8944.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh; /* Set height to fill the entire viewport */
+  display: flex;
+  justify-content: center; /* Center contents horizontally */
+  align-items: center; /* Center contents vertically */
+}
+
 .register-container {
   width: 400px;
   margin: 100px auto;
   padding: 30px;
-  border: 1px solid #ccc;
+  border: 1px solid #404040;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
+  background-image: linear-gradient(to bottom right, #232526, #414345);
 }
 
 .register-heading {
   font-size: 28px;
   margin-bottom: 30px;
   text-align: center;
-  color: #333;
+  color: #d6d6d6;
 }
 
 .register-input {
@@ -28,7 +39,7 @@
 .register-button {
   width: 100%;
   padding: 15px;
-  background-color: #002650ad;
+  background-color: #958400ad;
   color: white;
   border: none;
   border-radius: 5px;
@@ -37,5 +48,5 @@
 }
 
 .register-button:hover {
-  background-color: #0056b3;
+  background-color: #c8b101ad;
 }
