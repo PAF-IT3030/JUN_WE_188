@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../Styles/Workout.css";
+import backgroundImage from "../Workout/workout.jpg";
 
 function Workout() {
   const [image, setImage] = useState(null);
@@ -82,47 +83,55 @@ function Workout() {
   };
 
   return (
-    <div className="workout">
-      <h1>Workout Posts</h1>
+    <div
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundAttachment: "fixed",
+        backgroundSize: "cover",
+      }}
+    >
+      <div className="workout">
+        <h1 className="text-white text-4xl">Workout Posts</h1>
 
-      {/* Form to add a new post */}
-      <div className="form-container">
-        <input
-          type="file"
-          onChange={handleImageChange}
-          className="file-input"
-        />
-        <textarea
-          value={description}
-          onChange={handleDescriptionChange}
-          placeholder="Enter description"
-          className="description-input"
-        />
-        <button onClick={addPost} className="add-button">
-          Add Post
-        </button>
-      </div>
+        {/* Form to add a new post */}
+        <div className="form-container">
+          <input
+            type="file"
+            onChange={handleImageChange}
+            className="file-input"
+          />
+          <textarea
+            value={description}
+            onChange={handleDescriptionChange}
+            placeholder="Enter description"
+            className="description-input"
+          />
+          <button onClick={addPost} className="add-button">
+            Add Post
+          </button>
+        </div>
 
-      <br />
+        <br />
 
-      {/* Display all posts */}
-      <div className="posts-container">
-        {posts.map((post) => (
-          <div key={post.id} className="post">
-            <img src={`data:image/jpeg;base64,${post.image}`} alt="Workout" />
-            <p>{post.description}</p>
-            <div>
-              <button
-                onClick={() =>
-                  editPost(post.id, prompt("Enter new description:"))
-                }
-              >
-                Edit
-              </button>
-              <button onClick={() => deletePost(post.id)}>Delete</button>
+        {/* Display all posts */}
+        <div className="posts-container">
+          {posts.map((post) => (
+            <div key={post.id} className="post">
+              <img src={`data:image/jpeg;base64,${post.image}`} alt="Workout" />
+              <p>{post.description}</p>
+              <div>
+                <button
+                  onClick={() =>
+                    editPost(post.id, prompt("Enter new description:"))
+                  }
+                >
+                  Edit
+                </button>
+                <button onClick={() => deletePost(post.id)}>Delete</button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

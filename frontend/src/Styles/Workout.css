@@ -8,6 +8,7 @@ body {
 }
 
 /* Workout component styles */
+
 .workout {
   max-width: 600px;
   margin: 0 auto;
@@ -76,4 +77,8 @@ body {
   color: #1877f2;
   cursor: pointer;
   margin-right: 10px;
+}
+
+.posts-container {
+  margin-top: 1rem;
 }
