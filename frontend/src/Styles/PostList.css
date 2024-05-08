@@ -220,3 +220,8 @@
 .like-button:hover {
   color: #ba0202; /* Change text color to white on hover */
 }
+
+.posts-comments {
+  font-size: 14px;
+  margin-right: 220px;
+}

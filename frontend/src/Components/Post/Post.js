@@ -93,19 +93,16 @@ const PostList = () => {
     }
   };
 
-  const fetchComments = async (postId) => {
+  const fetchComments = async (id) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8070/comments/${postId}`
-      );
+      const response = await axios.get(`http://localhost:8070/comments/${id}`);
       setComments(response.data);
     } catch (error) {
       console.error("Error fetching comments:", error);
-      // toast.error("Failed to fetch comments.");
     }
   };
 
-  const handleCommentSubmit = async () => {
+  const handleCommentSubmit = async (id) => {
     try {
       // Make a POST request to save the comment to the database
       const response = await axios.post(
@@ -120,6 +117,14 @@ const PostList = () => {
     } catch (error) {
       console.error("Error adding comment:", error);
       toast.error("Failed to add comment.");
+    }
+  };
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await axios.delete(`/delete-comment/${commentId}`);
+      setComments(comments.filter((comment) => comment.id !== commentId));
+    } catch (error) {
+      console.error("Error deleting comment:", error);
     }
   };
 
@@ -177,11 +182,16 @@ const PostList = () => {
 
               {/* Display comments */}
               <div className="comments-section">
-                <h4>Comments</h4>
+                <p className="posts-comments">Comments...</p>
                 {comments.map((comment) => (
-                  <div key={comment._id} className="comment">
-                    <p>{comment.text}</p>
-                    <p>By: {comment.author}</p>
+                  <div key={comment.id} className="comment">
+                    <p>{comment.content}</p>
+                    <button
+                      className="delete-comment-button"
+                      onClick={() => handleDeleteComment(comment.id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
                   </div>
                 ))}
               </div>
