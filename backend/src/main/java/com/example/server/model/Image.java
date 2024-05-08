@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Entity
-@Table(name = "Posts")
+@Table(name = "Posts_table")
 public class Image {
     //@id-primary key
     @Id

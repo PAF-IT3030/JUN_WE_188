@@ -3,6 +3,8 @@ package com.example.server.controller;
 import com.example.server.DTO.PostDTO;
 import com.example.server.model.Image;
 import com.example.server.service.ImageService;
+import com.example.server.service.CommentService;
+import com.example.server.model.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.rowset.serial.SerialBlob;
@@ -25,10 +28,53 @@ import java.util.stream.Collectors;
 public class ClientController {
 
     private final ImageService imageService;
+    private final CommentService commentService;
 
     @Autowired
-    public ClientController(ImageService imageService) {
+    public ClientController(ImageService imageService, CommentService commentService) {
         this.imageService = imageService;
+        this.commentService = commentService;
+    }
+
+    @PostMapping("/add-comment/{id}")
+    public ResponseEntity<Comment> addComment(@PathVariable("id") long imageId, @RequestBody String commentContent) {
+        try {
+            Image image = imageService.viewById(imageId);
+            if (image != null) {
+                Comment comment = new Comment();
+                comment.setImage(image);
+                comment.setContent(commentContent);
+                Comment savedComment = commentService.create(comment);
+                return ResponseEntity.ok(savedComment);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle or log the exception as needed
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/comments/{id}")
+    public ResponseEntity<List<Comment>> getCommentsByImageId(@PathVariable("id") long imageId) {
+        List<Comment> comments = commentService.getByImageId(imageId);
+        if (comments != null) {
+            return ResponseEntity.ok(comments);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/delete-comment/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable("commentId") long commentId) {
+        try {
+            Comment comment = commentService.findById(commentId);
+            if (comment != null) {
+                commentService.delete(comment);
+                return ResponseEntity.ok().build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle or log the exception as needed
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/ping")
@@ -151,19 +197,15 @@ public class ClientController {
 
 
     @GetMapping("/all-posts")
-public ResponseEntity<List<PostDTO>> getAllPosts() {
-    List<Image> images = imageService.viewAll();
-    if (!images.isEmpty()) {
-        List<PostDTO> posts = images.stream()
-                .map(image -> new PostDTO(image.getId(), image.getImage(), image.getDescription()))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(posts);
-    } else {
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<List<PostDTO>> getAllPosts() {
+        List<Image> images = imageService.viewAll();
+        if (!images.isEmpty()) {
+            List<PostDTO> posts = images.stream()
+                    .map(image -> new PostDTO(image.getId(), image.getImage(), image.getDescription()))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(posts);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
-
-
-}
-
-
