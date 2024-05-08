@@ -7,6 +7,7 @@ function Workout() {
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
   const [posts, setPosts] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchPosts();
@@ -29,9 +30,22 @@ function Workout() {
 
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
+    setError(""); // Clear previous error message when description changes
+  };
+
+  const validateDescription = () => {
+    if (description.trim() === "") {
+      setError("Description cannot be empty");
+      return false;
+    }
+    return true;
   };
 
   const addPost = () => {
+    if (!validateDescription()) {
+      return; // Don't proceed if validation fails
+    }
+
     const formData = new FormData();
     formData.append("image", image);
     formData.append("description", description);
@@ -41,27 +55,13 @@ function Workout() {
       .then((response) => {
         if (response.data && response.data !== -1) {
           fetchPosts();
+          setDescription(""); // Clear input field after successful addition
         } else {
           alert("Failed to add post!");
         }
       })
       .catch((error) => {
         console.error("Error adding post:", error);
-      });
-  };
-
-  const deletePost = (id) => {
-    axios
-      .delete(`http://localhost:8070/workoutdelete-post/${id}`)
-      .then((response) => {
-        if (response.status === 200) {
-          fetchPosts();
-        } else {
-          alert("Failed to delete post!");
-        }
-      })
-      .catch((error) => {
-        console.error("Error deleting post:", error);
       });
   };
 
@@ -82,6 +82,21 @@ function Workout() {
       });
   };
 
+  const deletePost = (id) => {
+    axios
+      .delete(`http://localhost:8070/workoutdelete-post/${id}`)
+      .then((response) => {
+        if (response.status === 200) {
+          fetchPosts();
+        } else {
+          alert("Failed to delete post!");
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting post:", error);
+      });
+  };
+
   return (
     <div
       style={{
@@ -94,19 +109,24 @@ function Workout() {
         <h1 className="text-white text-4xl">Workout Posts</h1>
 
         {/* Form to add a new post */}
-        <div className="form-container">
+        <div className="form-container p-4 bg-white rounded shadow-md">
           <input
             type="file"
             onChange={handleImageChange}
-            className="file-input"
+            className="custom-file-input mb-4"
           />
+
           <textarea
             value={description}
             onChange={handleDescriptionChange}
             placeholder="Enter description"
-            className="description-input"
+            className="description-input border border-gray-300 p-2 rounded mb-4"
           />
-          <button onClick={addPost} className="add-button">
+          {error && <p className="text-red-500">{error}</p>}
+          <button
+            onClick={addPost}
+            className="add-button bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
             Add Post
           </button>
         </div>
