@@ -1,13 +1,20 @@
+// Workout.js
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../../Styles/Workout.css";
+import EditDescriptionPopup from "../Workout/EditDescriptionPopup";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import backgroundImage from "../Workout/workout.jpg";
+import "../../Styles/Workout.css";
 
 function Workout() {
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
 
   useEffect(() => {
     fetchPosts();
@@ -56,8 +63,10 @@ function Workout() {
         if (response.data && response.data !== -1) {
           fetchPosts();
           setDescription(""); // Clear input field after successful addition
+          toast.success("Post added successfully!");
         } else {
           alert("Failed to add post!");
+          toast.error("Failed to add post!");
         }
       })
       .catch((error) => {
@@ -73,8 +82,10 @@ function Workout() {
       .then((response) => {
         if (response.status === 200) {
           fetchPosts();
+          toast.success("Description updated successfully!");
         } else {
           alert("Failed to update description!");
+          toast.error("Failed to update description!");
         }
       })
       .catch((error) => {
@@ -88,8 +99,10 @@ function Workout() {
       .then((response) => {
         if (response.status === 200) {
           fetchPosts();
+          toast.success("Post deleted successfully!");
         } else {
           alert("Failed to delete post!");
+          toast.error("Failed to delete post!");
         }
       })
       .catch((error) => {
@@ -97,9 +110,20 @@ function Workout() {
       });
   };
 
+  const openEditPopup = (post) => {
+    setSelectedPost(post);
+    setShowPopup(true);
+  };
+
+  const closeEditPopup = () => {
+    setShowPopup(false);
+    setSelectedPost(null);
+  };
+
   return (
     <div
       style={{
+        marginBottom: "12px",
         backgroundImage: `url(${backgroundImage})`,
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
@@ -140,18 +164,26 @@ function Workout() {
               <img src={`data:image/jpeg;base64,${post.image}`} alt="Workout" />
               <p>{post.description}</p>
               <div>
-                <button
-                  onClick={() =>
-                    editPost(post.id, prompt("Enter new description:"))
-                  }
-                >
-                  Edit
-                </button>
+                <button onClick={() => openEditPopup(post)}>Edit</button>
                 <button onClick={() => deletePost(post.id)}>Delete</button>
               </div>
             </div>
           ))}
         </div>
+
+        {/* Popup for editing description */}
+        {showPopup && selectedPost && (
+          <EditDescriptionPopup
+            currentDescription={selectedPost.description}
+            onSave={(newDescription) => {
+              editPost(selectedPost.id, newDescription);
+            }}
+            onClose={closeEditPopup}
+          />
+        )}
+
+        {/* Toast notifications */}
+        <ToastContainer />
       </div>
     </div>
   );
