@@ -1,20 +1,30 @@
-// Workout.js
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import EditDescriptionPopup from "../Workout/EditDescriptionPopup";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import {
+  TextField,
+  Button,
+  Typography,
+  Container,
+  Card,
+  CardContent,
+  CardActions,
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+import { toast } from "react-toastify";
 import backgroundImage from "../Workout/workout.jpg";
-import "../../Styles/Workout.css";
 
 function Workout() {
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
-  const [selectedPost, setSelectedPost] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [editDescription, setEditDescription] = useState("");
 
   useEffect(() => {
     fetchPosts();
@@ -64,6 +74,7 @@ function Workout() {
           fetchPosts();
           setDescription(""); // Clear input field after successful addition
           toast.success("Post added successfully!");
+          handleClose();
         } else {
           alert("Failed to add post!");
           toast.error("Failed to add post!");
@@ -74,15 +85,32 @@ function Workout() {
       });
   };
 
-  const editPost = (id, newDescription) => {
+  const editPost = (id) => {
+    setSelectedPostId(id);
     axios
-      .put(`http://localhost:8070/workoutupdate-description?id=${id}`, {
-        description: newDescription,
+      .get(`http://localhost:8070/workoutdescription?id=${id}`)
+      .then((response) => {
+        setEditDescription(response.data);
+        setOpen(true);
       })
+      .catch((error) => {
+        console.error("Error fetching post description:", error);
+      });
+  };
+
+  const updatePostDescription = () => {
+    axios
+      .put(
+        `http://localhost:8070/workoutupdate-description?id=${selectedPostId}`,
+        {
+          description: editDescription,
+        }
+      )
       .then((response) => {
         if (response.status === 200) {
           fetchPosts();
           toast.success("Description updated successfully!");
+          handleClose();
         } else {
           alert("Failed to update description!");
           toast.error("Failed to update description!");
@@ -110,81 +138,115 @@ function Workout() {
       });
   };
 
-  const openEditPopup = (post) => {
-    setSelectedPost(post);
-    setShowPopup(true);
+  const handleClickOpen = () => {
+    setOpen(true);
   };
 
-  const closeEditPopup = () => {
-    setShowPopup(false);
-    setSelectedPost(null);
+  const handleClose = () => {
+    setOpen(false);
+    setEditDescription("");
+    setSelectedPostId(null);
   };
 
   return (
     <div
       style={{
-        marginBottom: "12px",
+        marginBottom: "1px",
         backgroundImage: `url(${backgroundImage})`,
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
       }}
     >
-      <div className="workout">
-        <h1 className="text-white text-4xl">Workout Posts</h1>
+      <Container>
+        <Typography
+          fontSize="50px"
+          variant="h1"
+          component="h2"
+          color="#fff"
+          gutterBottom
+        >
+          Workout Posts
+        </Typography>
 
-        {/* Form to add a new post */}
-        <div className="form-container p-4 bg-white rounded shadow-md">
-          <input
-            type="file"
-            onChange={handleImageChange}
-            className="custom-file-input mb-4"
-          />
+        {/* Button to open dialog for adding a new post */}
+        <Button variant="contained" color="primary" onClick={handleClickOpen}>
+          Add New Post
+        </Button>
 
-          <textarea
-            value={description}
-            onChange={handleDescriptionChange}
-            placeholder="Enter description"
-            className="description-input border border-gray-300 p-2 rounded mb-4"
-          />
-          {error && <p className="text-red-500">{error}</p>}
-          <button
-            onClick={addPost}
-            className="add-button bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Add Post
-          </button>
-        </div>
+        <br />
+
+        {/* Dialog for adding a new post */}
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>
+            {selectedPostId ? "Edit Post" : "Add New Post"}
+          </DialogTitle>
+          <DialogContent>
+            {selectedPostId ? null : (
+              <input
+                type="file"
+                onChange={handleImageChange}
+                className="custom-file-input mb-4"
+              />
+            )}
+            <TextField
+              value={selectedPostId ? editDescription : description}
+              onChange={
+                selectedPostId
+                  ? (e) => setEditDescription(e.target.value)
+                  : handleDescriptionChange
+              }
+              placeholder="Enter description"
+              className="description-input border border-gray-300 p-2 rounded mb-4"
+              multiline
+              rows={4}
+              fullWidth
+            />
+            {error && (
+              <Typography variant="body2" color="error">
+                {error}
+              </Typography>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={selectedPostId ? updatePostDescription : addPost}
+              color="primary"
+            >
+              {selectedPostId ? "Update" : "Add"}
+            </Button>
+          </DialogActions>
+        </Dialog>
 
         <br />
 
         {/* Display all posts */}
-        <div className="posts-container">
+        <Grid container spacing={2}>
           {posts.map((post) => (
-            <div key={post.id} className="post">
-              <img src={`data:image/jpeg;base64,${post.image}`} alt="Workout" />
-              <p>{post.description}</p>
-              <div>
-                <button onClick={() => openEditPopup(post)}>Edit</button>
-                <button onClick={() => deletePost(post.id)}>Delete</button>
-              </div>
-            </div>
+            <Grid item xs={12} sm={6} md={4} key={post.id}>
+              <Card>
+                <CardContent>
+                  <img
+                    src={`data:image/jpeg;base64,${post.image}`}
+                    alt="Workout"
+                  />
+                  <Typography variant="body1">{post.description}</Typography>
+                </CardContent>
+                <CardActions>
+                  <Button onClick={() => editPost(post.id)} color="primary">
+                    Edit
+                  </Button>
+                  <Button onClick={() => deletePost(post.id)} color="secondary">
+                    Delete
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
           ))}
-        </div>
-
-        {/* Popup for editing description */}
-        {showPopup && selectedPost && (
-          <EditDescriptionPopup
-            currentDescription={selectedPost.description}
-            onSave={(newDescription) => {
-              editPost(selectedPost.id, newDescription);
-            }}
-            onClose={closeEditPopup}
-          />
-        )}
-
-        {/* Toast notifications */}
-        <ToastContainer />
-      </div>
+        </Grid>
+      </Container>
     </div>
   );
 }
