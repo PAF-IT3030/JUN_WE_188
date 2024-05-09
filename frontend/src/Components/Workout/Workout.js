@@ -178,7 +178,7 @@ function Workout() {
         {/* Dialog for adding a new post */}
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>
-            {selectedPostId ? "Edit Post" : "Add New Post"}
+            {selectedPostId ? "Edit Post Discripthion" : "Add New Post"}
           </DialogTitle>
           <DialogContent>
             {selectedPostId ? null : (
