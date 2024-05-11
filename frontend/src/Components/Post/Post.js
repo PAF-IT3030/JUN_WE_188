@@ -93,43 +93,6 @@ const PostList = () => {
     }
   };
 
-  const fetchComments = async (id) => {
-    try {
-      const response = await axios.get(`http://localhost:8070/comments/${id}`);
-      setComments(response.data);
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-    }
-  };
-
-  const handleCommentSubmit = async () => {
-    try {
-      // Make a POST request to save the comment to the database
-      const response = await axios.post(
-        `http://localhost:8070/add-comment/${selectedImage.id}`,
-        commentInput // Send the comment input directly
-      );
-      // Update the state with the new comment
-      setComments([...comments, response.data]);
-      // Clear the comment input field
-      setCommentInput("");
-      toast.success("Comment added successfully!");
-    } catch (error) {
-      console.error("Error adding comment:", error);
-      toast.error("Failed to add comment.");
-    }
-  };
-
-  const handleDeleteComment = async (commentId) => {
-    try {
-      await axios.delete(`http://localhost:8070/delete-comment/${commentId}`);
-      setComments(comments.filter((comment) => comment.id !== commentId));
-      toast.success("Comment deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting comment:", error);
-    }
-  };
-
   const handleLike = async () => {
     try {
       console.log("did not created yet");
