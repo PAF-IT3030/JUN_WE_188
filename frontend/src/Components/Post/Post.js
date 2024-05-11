@@ -27,7 +27,7 @@ const PostList = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching images:", error);
-        toast.error("Failed to fetch posts.");
+        //toast.error("Failed to fetch posts.");
       }
     };
 
@@ -102,12 +102,12 @@ const PostList = () => {
     }
   };
 
-  const handleCommentSubmit = async (id) => {
+  const handleCommentSubmit = async () => {
     try {
       // Make a POST request to save the comment to the database
       const response = await axios.post(
         `http://localhost:8070/add-comment/${selectedImage.id}`,
-        { comment: commentInput }
+        commentInput // Send the comment input directly
       );
       // Update the state with the new comment
       setComments([...comments, response.data]);
@@ -119,10 +119,12 @@ const PostList = () => {
       toast.error("Failed to add comment.");
     }
   };
+
   const handleDeleteComment = async (commentId) => {
     try {
-      await axios.delete(`/delete-comment/${commentId}`);
+      await axios.delete(`http://localhost:8070/delete-comment/${commentId}`);
       setComments(comments.filter((comment) => comment.id !== commentId));
+      toast.success("Comment deleted successfully!");
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
@@ -158,43 +160,7 @@ const PostList = () => {
                 onClick={() => handleImageClick(img.id)}
               />
               <p className="post-description">{img.description}</p>
-              {/* Comment input field */}
-              <div className="like-comment-container">
-                <input
-                  className="commentcontainer"
-                  type="text"
-                  placeholder="Add a comment..."
-                  value={commentInput}
-                  onChange={(e) => setCommentInput(e.target.value)}
-                />
-                {/* Button to submit the comment */}
-                <button
-                  className="submit-comment-button"
-                  onClick={handleCommentSubmit}
-                >
-                  <FontAwesomeIcon icon={faPaperPlane} />
-                </button>
-                {/* Like button */}
-                <button className="like-button" onClick={handleLike}>
-                  <FontAwesomeIcon icon={faHeart} />
-                </button>
-              </div>
-
-              {/* Display comments */}
-              <div className="comments-section">
-                <p className="posts-comments">Comments...</p>
-                {comments.map((comment) => (
-                  <div key={comment.id} className="comment">
-                    <p>{comment.content}</p>
-                    <button
-                      className="delete-comment-button"
-                      onClick={() => handleDeleteComment(comment.id)}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </div>
-                ))}
-              </div>
+              {selectedImage && selectedImage.id === img.id && <></>}
             </div>
           ))}
         </div>
@@ -223,9 +189,45 @@ const PostList = () => {
             <button className="delete-button" onClick={handleDelete}>
               <FontAwesomeIcon icon={faTrash} />
             </button>
+            {/* Comment input field */}
+            <div className="like-comment-container">
+              <input
+                className="commentcontainer"
+                type="text"
+                placeholder="Add a comment..."
+                value={commentInput}
+                onChange={(e) => setCommentInput(e.target.value)}
+              />
+              {/* Button to submit the comment */}
+              <button
+                className="submit-comment-button"
+                onClick={handleCommentSubmit}
+              >
+                <FontAwesomeIcon icon={faPaperPlane} />
+              </button>
+              {/* Like button */}
+              <button className="like-button" onClick={handleLike}>
+                <FontAwesomeIcon icon={faHeart} />
+              </button>
+            </div>
             <button className="close-popup" onClick={handleClosePreview}>
               <FontAwesomeIcon icon={faTimes} /> Close
             </button>
+            {/* Display comments */}
+            <div className="comments-section">
+              <p className="posts-comments">Comments...</p>
+              {comments.map((comment) => (
+                <div key={comment.id} className="comment">
+                  <p>{comment.content}</p>
+                  <button
+                    className="delete-comment-button"
+                    onClick={() => handleDeleteComment(comment.id)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

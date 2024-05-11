@@ -87,9 +87,13 @@ input[type="file"] {
 }
 
 .description-input {
-  background-color: #7d7d81;
+  background-color: #7b7b7be9;
 }
 
 .descriptioncolor {
   color: white;
+}
+
+#description {
+  color: #ffffff;
 }

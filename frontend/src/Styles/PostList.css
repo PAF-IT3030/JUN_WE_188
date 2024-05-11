@@ -20,8 +20,14 @@
 
 .post-item {
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 15px;
   overflow: hidden;
+  /* border: 0.2px solid rgba(0, 0, 0, 0.267); */
+  transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s ease; /* Add transition effect */
+}
+
+.post-item:hover {
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1); /* Add box shadow on hover */
 }
 
 .post-image {
@@ -224,4 +230,80 @@
 .posts-comments {
   font-size: 14px;
   margin-right: 220px;
+}
+/* Comment Styles */
+.comments-section {
+  margin-top: 20px;
+}
+
+.comment {
+  background-color: #ffffff; /* Change background color */
+  border: 1px solid #ddd; /* Add border */
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add box shadow */
+}
+
+.comment p {
+  margin: 5px 0;
+}
+
+.comment .comment-content {
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.comment .delete-comment-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #ff1e00;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.comment .delete-comment-button:hover {
+  background-color: #ba0202;
+}
+
+.submit-comment-button {
+  background-color: #cac715;
+  color: #454545;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.3s;
+}
+
+.submit-comment-button:hover {
+  background-color: #817401;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #4267b2; /* Facebook blue color */
+}
+
+.comment-metadata {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #808080; /* Light gray color */
+}
+
+.comment-like {
+  color: #4267b2; /* Facebook blue color */
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.comment-like:hover {
+  text-decoration: underline;
 }

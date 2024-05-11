@@ -74,6 +74,7 @@ const ImageUploader = () => {
               Description:
             </label>
             <input
+              placeholder="Type here"
               type="text"
               id="description"
               className="description-input"
