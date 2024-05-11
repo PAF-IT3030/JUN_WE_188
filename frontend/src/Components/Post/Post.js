@@ -132,13 +132,7 @@ const PostList = () => {
 
   const handleLike = async () => {
     try {
-      // Perform the like operation here (e.g., send a request to the server)
-      // Example:
-      // await axios.post(`http://localhost:8070/like/${selectedImage.id}`);
-      // Update the UI to reflect the like action (e.g., increase like count)
-      // Example:
-      // setLikes(likes + 1);
-      // Display a success message
+      console.log("did not created yet");
     } catch (error) {
       console.error("Error liking post:", error);
     }
@@ -174,21 +168,25 @@ const PostList = () => {
               alt="Selected"
               className="selected-image"
             />
+            <button
+              className="update-description-button"
+              onClick={handleDescriptionUpdate}
+            >
+              <FontAwesomeIcon icon={faEdit} /> Update
+            </button>
+            <button className="delete-button" onClick={handleDelete}>
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+            <button className="close-popup" onClick={handleClosePreview}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
             <textarea
               className="description-textarea"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Update your Description here.."
             />
-            <button
-              className="update-description-button"
-              onClick={handleDescriptionUpdate}
-            >
-              <FontAwesomeIcon icon={faEdit} /> Update Description
-            </button>
-            <button className="delete-button" onClick={handleDelete}>
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
+
             {/* Comment input field */}
             <div className="like-comment-container">
               <input
@@ -210,9 +208,7 @@ const PostList = () => {
                 <FontAwesomeIcon icon={faHeart} />
               </button>
             </div>
-            <button className="close-popup" onClick={handleClosePreview}>
-              <FontAwesomeIcon icon={faTimes} /> Close
-            </button>
+
             {/* Display comments */}
             <div className="comments-section">
               <p className="posts-comments">Comments...</p>

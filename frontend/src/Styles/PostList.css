@@ -102,11 +102,11 @@
 }
 
 .close-popup {
-  background-color: #ba0202;
+  background-color: #7d0000;
   color: #ffffff;
   font-size: 25px;
   border: none;
-  padding: 25px 40px;
+  padding: 20px 40px;
   border-radius: 4px;
   cursor: pointer;
   margin-bottom: 10px;
@@ -160,8 +160,8 @@
   color: #ba0202;
   background-color: #57575700;
   border: 0.1px solid rgba(0, 0, 0, 0);
-  size: 50px;
   padding-left: 50px;
+  font-size: 50px;
 }
 
 /* Comment Styles */
@@ -173,7 +173,9 @@
   background-color: #f2f2f2;
   border: 1px solid #ccc;
   border-radius: 6px;
-  padding: 8px;
+  padding: 20px 510px;
+
+  font-size: 25px;
 }
 
 .commentcontainer p {
@@ -192,10 +194,11 @@
   background-color: #cac715;
   color: #454545;
   border: none;
-  padding: 5px 20px;
+  padding: 20px 40px;
   border-radius: 4px;
   cursor: pointer;
   margin-left: 10px;
+  font-size: 25px;
 }
 
 .submit-comment-button:hover {
@@ -228,7 +231,7 @@
 }
 
 .posts-comments {
-  font-size: 14px;
+  font-size: 25px;
   margin-right: 220px;
 }
 /* Comment Styles */
@@ -272,30 +275,25 @@
   background-color: #ba0202;
 }
 
-.submit-comment-button {
-  background-color: #cac715;
-  color: #454545;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: 10px;
-  transition: background-color 0.3s;
+.submit-comment-container {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
 }
 
-.submit-comment-button:hover {
-  background-color: #817401;
+.comment-input {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 10px;
+  font-size: 16px;
+  outline: none;
 }
 
-.comment-author {
-  font-weight: bold;
-  color: #4267b2; /* Facebook blue color */
-}
-
-.comment-metadata {
-  margin-top: 5px;
-  font-size: 12px;
-  color: #808080; /* Light gray color */
+.comment-actions {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .comment-like {
@@ -306,4 +304,10 @@
 
 .comment-like:hover {
   text-decoration: underline;
+}
+
+.comment-metadata {
+  margin-left: 5px;
+  font-size: 12px;
+  color: #808080; /* Light gray color */
 }
