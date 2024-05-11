@@ -36,47 +36,7 @@ public class ClientController {
         this.commentService = commentService;
     }
 
-    @PostMapping("/add-comment/{id}")
-    public ResponseEntity<Comment> addComment(@PathVariable("id") long imageId, @RequestBody String commentContent) {
-        try {
-            Image image = imageService.viewById(imageId);
-            if (image != null) {
-                Comment comment = new Comment();
-                comment.setImage(image);
-                comment.setContent(commentContent);
-                Comment savedComment = commentService.create(comment);
-                return ResponseEntity.ok(savedComment);
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // Handle or log the exception as needed
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/comments/{id}")
-    public ResponseEntity<List<Comment>> getCommentsByImageId(@PathVariable("id") long imageId) {
-        List<Comment> comments = commentService.getByImageId(imageId);
-        if (comments != null) {
-            return ResponseEntity.ok(comments);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @DeleteMapping("/delete-comment/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable("commentId") long commentId) {
-        try {
-            Comment comment = commentService.findById(commentId);
-            if (comment != null) {
-                commentService.delete(comment);
-                return ResponseEntity.ok().build();
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // Handle or log the exception as needed
-        }
-        return ResponseEntity.notFound().build();
-    }
-
+   
     @GetMapping("/ping")
     @ResponseBody
     public String helloWorld() {
