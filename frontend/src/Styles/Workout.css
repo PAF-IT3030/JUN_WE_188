@@ -14,13 +14,24 @@ body {
   margin: 0 auto;
   background-color: #fff;
   border-radius: 8px;
+<<<<<<< HEAD
+=======
+  background-color: #e9e4e434;
+>>>>>>> 168971cf764c6e6db0b9a0048b7628d6800c4167
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
 }
 
+<<<<<<< HEAD
 .workout h1 {
   font-size: 24px;
   font-weight: bold;
+=======
+.workout-heading {
+  font-size: 28px;
+  font-family: monospace;
+  color: #000000;
+>>>>>>> 168971cf764c6e6db0b9a0048b7628d6800c4167
   margin-bottom: 20px;
 }
 
@@ -31,6 +42,7 @@ body {
   margin-bottom: 20px;
 }
 
+<<<<<<< HEAD
 .file-input {
   margin-bottom: 10px;
 }
@@ -46,6 +58,11 @@ body {
 
 .add-button {
   background-color: #1877f2;
+=======
+.workout-button {
+  padding: 12px 24px;
+  background-color: #958400ad;
+>>>>>>> 168971cf764c6e6db0b9a0048b7628d6800c4167
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -53,6 +70,7 @@ body {
   cursor: pointer;
 }
 
+<<<<<<< HEAD
 /* Post styles */
 .post {
   margin-bottom: 20px;
@@ -114,4 +132,8 @@ body {
 
 .custom-file-input:focus-within {
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+=======
+.workout-button:hover {
+  background-color: #c8b101ad;
+>>>>>>> 168971cf764c6e6db0b9a0048b7628d6800c4167
 }

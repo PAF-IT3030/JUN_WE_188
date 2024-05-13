@@ -8,7 +8,6 @@ import Register from "./Components/Authentication/Register";
 import Profile from "./Components/Profile/Profile";
 import ProfileEdit from "./Components/ProfileEdit/ProfileEdit";
 import Post from "./Components/Post/Post";
-import Allpost from "./Components/Post/AllPosts";
 import ImageUploader from "./Components/Post/ImageUploader";
 import Comment from "./Components/Comment/Comment";
 import CommentsList from "./Components/Comment/CommentsList";
@@ -39,7 +38,6 @@ function Layout({ children }) {
     "/workout",
     "/feed",
     "/imageUploader",
-    "/allpost",
   ];
 
   // Check if the current path is included in the array
@@ -74,7 +72,6 @@ function App() {
           <Route path="/workout" element={<Workout />} />
           <Route path="/feed" element={<Feed />} />
           <Route path="/imageUploader" element={<ImageUploader />} />
-          <Route path="/allpost" element={<Allpost />} />
         </Routes>
       </Layout>
     </BrowserRouter>

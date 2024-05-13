@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faEdit, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faEdit,
+  faTimes,
+  faPaperPlane,
+  faHeart,
+} from "@fortawesome/free-solid-svg-icons";
 import "../../Styles/PostList.css"; // Import CSS file for styling
 
 const PostList = () => {
@@ -10,6 +16,8 @@ const PostList = () => {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
   const [description, setDescription] = useState("");
+  const [commentInput, setCommentInput] = useState(""); // State variable for comment input
+  const [comments, setComments] = useState([]); // State variable for comments
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -19,7 +27,7 @@ const PostList = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching images:", error);
-        //toast.error("You have no posts.");
+        toast.error("Failed to fetch posts.");
       }
     };
 
@@ -33,6 +41,7 @@ const PostList = () => {
       );
       setSelectedImage({ ...response.data, id });
       setDescription(response.data.description);
+      fetchComments(id); // Fetch comments for the selected post
     } catch (error) {
       console.error("Error fetching post details:", error);
       toast.error(`Failed to display post ${id}!`);
@@ -84,6 +93,55 @@ const PostList = () => {
     }
   };
 
+  const fetchComments = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:8070/comments/${id}`);
+      setComments(response.data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
+
+  const handleCommentSubmit = async (id) => {
+    try {
+      // Make a POST request to save the comment to the database
+      const response = await axios.post(
+        `http://localhost:8070/add-comment/${selectedImage.id}`,
+        { comment: commentInput }
+      );
+      // Update the state with the new comment
+      setComments([...comments, response.data]);
+      // Clear the comment input field
+      setCommentInput("");
+      toast.success("Comment added successfully!");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      toast.error("Failed to add comment.");
+    }
+  };
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await axios.delete(`/delete-comment/${commentId}`);
+      setComments(comments.filter((comment) => comment.id !== commentId));
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+
+  const handleLike = async () => {
+    try {
+      // Perform the like operation here (e.g., send a request to the server)
+      // Example:
+      // await axios.post(`http://localhost:8070/like/${selectedImage.id}`);
+      // Update the UI to reflect the like action (e.g., increase like count)
+      // Example:
+      // setLikes(likes + 1);
+      // Display a success message
+    } catch (error) {
+      console.error("Error liking post:", error);
+    }
+  };
+
   return (
     <div className="post-list-container">
       <h2 className="post-list-heading">My Posts</h2>
@@ -99,18 +157,52 @@ const PostList = () => {
                 className="post-image"
                 onClick={() => handleImageClick(img.id)}
               />
-
               <p className="post-description">{img.description}</p>
+              {/* Comment input field */}
+              <div className="like-comment-container">
+                <input
+                  className="commentcontainer"
+                  type="text"
+                  placeholder="Add a comment..."
+                  value={commentInput}
+                  onChange={(e) => setCommentInput(e.target.value)}
+                />
+                {/* Button to submit the comment */}
+                <button
+                  className="submit-comment-button"
+                  onClick={handleCommentSubmit}
+                >
+                  <FontAwesomeIcon icon={faPaperPlane} />
+                </button>
+                {/* Like button */}
+                <button className="like-button" onClick={handleLike}>
+                  <FontAwesomeIcon icon={faHeart} />
+                </button>
+              </div>
+
+              {/* Display comments */}
+              <div className="comments-section">
+                <p className="posts-comments">Comments...</p>
+                {comments.map((comment) => (
+                  <div key={comment.id} className="comment">
+                    <p>{comment.content}</p>
+                    <button
+                      className="delete-comment-button"
+                      onClick={() => handleDeleteComment(comment.id)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
       )}
+
       {selectedImage && (
         <div className="popup-container active">
           <div className="popup-content active">
-            <button className="close-popup" onClick={handleClosePreview}>
-              <FontAwesomeIcon icon={faTimes} /> Close Preview
-            </button>
             <img
               src={`http://localhost:8070/display?id=${selectedImage.id}`}
               alt="Selected"
@@ -120,6 +212,7 @@ const PostList = () => {
               className="description-textarea"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              placeholder="Update your Description here.."
             />
             <button
               className="update-description-button"
@@ -128,7 +221,10 @@ const PostList = () => {
               <FontAwesomeIcon icon={faEdit} /> Update Description
             </button>
             <button className="delete-button" onClick={handleDelete}>
-              <FontAwesomeIcon icon={faTrash} /> Delete
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+            <button className="close-popup" onClick={handleClosePreview}>
+              <FontAwesomeIcon icon={faTimes} /> Close
             </button>
           </div>
         </div>
