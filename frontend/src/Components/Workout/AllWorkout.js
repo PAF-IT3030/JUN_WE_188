@@ -11,15 +11,20 @@ import {
   CardHeader,
   CardActions,
   Divider,
+  Button,
+  TextField,
 } from "@mui/material";
 import {
   FavoriteBorderOutlined,
   ChatBubbleOutlineOutlined,
+  DeleteOutlineOutlined,
+  EditOutlined,
 } from "@mui/icons-material";
-import backgroundImage from "../Workout/workout.jpg";
 
 function AllWorkout() {
   const [posts, setPosts] = useState([]);
+  const [commentText, setCommentText] = useState("");
+  const [editingComment, setEditingComment] = useState({});
 
   useEffect(() => {
     fetchPosts();
@@ -29,7 +34,12 @@ function AllWorkout() {
     axios
       .get("http://localhost:8070/workoutall-posts")
       .then((response) => {
-        setPosts(response.data);
+        setPosts(
+          response.data.map((post) => ({
+            ...post,
+            comments: post.comments || [],
+          }))
+        );
       })
       .catch((error) => {
         console.error("Error fetching posts:", error);
@@ -37,31 +47,64 @@ function AllWorkout() {
   };
 
   const handleLike = (id) => {
-    // Send a request to your backend to increment the like count of the post with the given id
-    axios
-      .put(`http://localhost:8070/workoutlike/${id}`)
-      .then((response) => {
-        // If the like count is updated successfully, fetch the posts again to update the UI
-        if (response.status === 200) {
-          fetchPosts();
-        } else {
-          console.error("Failed to update like count");
-        }
-      })
-      .catch((error) => {
-        console.error("Error updating like count:", error);
-      });
+    // Implement like functionality
   };
 
-  const handleComment = (id) => {
-    // Handle comment functionality
+  const handleComment = async (postId) => {
+    if (!commentText) return; // Prevent empty comments
+
+    try {
+      await axios.post(
+        `http://localhost:8070/workoutall-posts/${postId}/comments`,
+        {
+          text: commentText,
+        }
+      );
+      setCommentText("");
+      fetchPosts();
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
+
+  const handleDeleteComment = async (postId, commentId) => {
+    try {
+      await axios.delete(
+        `http://localhost:8070/workoutall-posts/${postId}/comments/${commentId}`
+      );
+      fetchPosts();
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+
+  const handleEditComment = async (postId, commentId, newText) => {
+    try {
+      await axios.put(
+        `http://localhost:8070/workoutall-posts/${postId}/comments/${commentId}`,
+        {
+          text: newText,
+        }
+      );
+      setEditingComment({});
+      fetchPosts();
+    } catch (error) {
+      console.error("Error editing comment:", error);
+    }
+  };
+
+  const startEditing = (comment) => {
+    setEditingComment(comment);
+  };
+
+  const cancelEditing = () => {
+    setEditingComment({});
   };
 
   return (
     <div
       style={{
         marginBottom: "1px",
-        backgroundImage: `url(${backgroundImage})`,
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
       }}
@@ -77,7 +120,6 @@ function AllWorkout() {
         >
           Workout Posts
         </Typography>
-
         <br />
 
         {/* Display all posts */}
@@ -98,6 +140,60 @@ function AllWorkout() {
                 )}
                 <CardContent>
                   <Typography variant="body1">{post.description}</Typography>
+                  {/* Display comments */}
+                  {post.comments.map((comment) => (
+                    <div key={comment.id}>
+                      {editingComment.id === comment.id ? (
+                        <div>
+                          <TextField
+                            value={editingComment.text}
+                            onChange={(e) =>
+                              setEditingComment({
+                                ...editingComment,
+                                text: e.target.value,
+                              })
+                            }
+                          />
+                          <Button
+                            onClick={() =>
+                              handleEditComment(
+                                post.id,
+                                comment.id,
+                                editingComment.text
+                              )
+                            }
+                          >
+                            Save
+                          </Button>
+                          <Button onClick={cancelEditing}>Cancel</Button>
+                        </div>
+                      ) : (
+                        <div>
+                          <Typography>{comment.text}</Typography>
+                          <IconButton
+                            onClick={() =>
+                              handleDeleteComment(post.id, comment.id)
+                            }
+                          >
+                            <DeleteOutlineOutlined />
+                          </IconButton>
+                          <IconButton onClick={() => startEditing(comment)}>
+                            <EditOutlined />
+                          </IconButton>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  {/* Comment form */}
+                  <TextField
+                    fullWidth
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    placeholder="Add a comment"
+                  />
+                  <Button onClick={() => handleComment(post.id)}>
+                    Comment
+                  </Button>
                 </CardContent>
                 <Divider />
                 <CardActions disableSpacing>
@@ -105,10 +201,10 @@ function AllWorkout() {
                     <FavoriteBorderOutlined />
                   </IconButton>
                   <Typography>{post.likes}</Typography>
-                  <IconButton onClick={() => handleComment(post.id)}>
+                  <IconButton>
                     <ChatBubbleOutlineOutlined />
                   </IconButton>
-                  <Typography>{post.comments}</Typography>
+                  <Typography>{post.comments.length}</Typography>
                 </CardActions>
               </Card>
             </Grid>
