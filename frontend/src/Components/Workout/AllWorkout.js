@@ -25,6 +25,7 @@ function AllWorkout() {
   const [posts, setPosts] = useState([]);
   const [commentText, setCommentText] = useState("");
   const [editingComment, setEditingComment] = useState({});
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     fetchPosts();
@@ -50,21 +51,26 @@ function AllWorkout() {
     // Implement like functionality
   };
 
-  const handleComment = async (postId) => {
-    if (!commentText) return; // Prevent empty comments
+  const handleComment = () => {
+    const formData = new FormData();
+    formData.append("description", description);
 
-    try {
-      await axios.post(
-        `http://localhost:8070/workoutall-posts/${postId}/comments`,
-        {
-          text: commentText,
+    axios
+      .post("http://localhost:8070/workoutadd-comment/{id}", formData)
+      .then((response) => {
+        if (response.data && response.data !== -1) {
+          fetchPosts();
+          setDescription(""); // Clear input field after successful addition
+          // toast.success("Post added successfully!");
+          // handleClose();
+        } else {
+          alert("Failed to add post!");
+          // toast.error("Failed to add post!");
         }
-      );
-      setCommentText("");
-      fetchPosts();
-    } catch (error) {
-      console.error("Error adding comment:", error);
-    }
+      })
+      .catch((error) => {
+        console.error("Error adding post:", error);
+      });
   };
 
   const handleDeleteComment = async (postId, commentId) => {
@@ -115,7 +121,7 @@ function AllWorkout() {
           fontSize="40px"
           variant="h1"
           component="h2"
-          color="#fff"
+          color="#000"
           gutterBottom
         >
           Workout Posts
