@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,34 +12,46 @@ import {
 import "../../Styles/PostList.css"; // Import CSS file for styling
 
 const PostList = () => {
-  const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [media, setMedia] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState(null);
   const [description, setDescription] = useState("");
   const [commentInput, setCommentInput] = useState(""); // State variable for comment input
   const [comments, setComments] = useState([]); // State variable for comments
+  const [, setFilter] = useState("none"); // State variable for filter
 
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const response = await axios.get("http://localhost:8070/all-posts");
-        setImages(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching images:", error);
-        //toast.error("Failed to fetch posts.");
-      }
-    };
+  const fetchMedia = async (mediaType) => {
+    setLoading(true);
+    try {
+      const endpoint = mediaType === "image" ? "all-posts" : "videos";
+      const response = await axios.get(`http://localhost:8070/${endpoint}`);
+      setMedia(response.data.map((item) => ({ ...item, type: mediaType }))); // Set the type of each item in the response based on the mediaType
+      setLoading(false);
+    } catch (error) {
+      console.error(`Error fetching ${mediaType}s:`, error);
+      toast.error(`Failed to fetch ${mediaType}s.`);
+      setLoading(false);
+    }
+  };
 
-    fetchImages();
-  }, []);
-
-  const handleImageClick = async (id) => {
+  const handleMediaClick = async (id, type) => {
     try {
       const response = await axios.get(
         `http://localhost:8070/display?id=${id}`
       );
-      setSelectedImage({ ...response.data, id });
+      setSelectedMedia({ ...response.data, id, type });
+      setDescription(response.data.description);
+      fetchComments(id); // Fetch comments for the selected post
+    } catch (error) {
+      console.error("Error fetching post details:", error);
+      toast.error(`Failed to display post ${id}!`);
+    }
+  };
+
+  const handlevideoClick = async (id, type) => {
+    try {
+      const response = await axios.get(`http://localhost:8070/video/${id}`);
+      setSelectedMedia({ ...response.data, id, type });
       setDescription(response.data.description);
       fetchComments(id); // Fetch comments for the selected post
     } catch (error) {
@@ -49,88 +61,163 @@ const PostList = () => {
   };
 
   const handleClosePreview = () => {
-    setSelectedImage(null);
+    setSelectedMedia(null);
   };
 
   const handleDescriptionUpdate = async () => {
     try {
       await axios.put(
-        `http://localhost:8070/update-description?id=${selectedImage.id}`,
-        {
-          description: description,
-        }
+        `http://localhost:8070/update-description?id=${selectedMedia.id}`,
+        { description: description }
       );
       // Update the description in the local state
-      setImages((prevImages) =>
-        prevImages.map((img) =>
-          img.id === selectedImage.id
-            ? { ...img, description: description }
-            : img
+      setMedia((prevMedia) =>
+        prevMedia.map((item) =>
+          item.id === selectedMedia.id
+            ? { ...item, description: description }
+            : item
         )
       );
       toast.success("Description updated successfully!");
-      setSelectedImage(null); // Close the popup window after update
+      setSelectedMedia(null); // Close the popup window after update
     } catch (error) {
       console.error("Error updating description:", error);
       toast.error("Failed to update description.");
     }
   };
-
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `http://localhost:8070/delete-post/${selectedImage.id}`
+        `http://localhost:8070/delete-post/${selectedMedia.id}`
       );
-      // Remove the deleted image from the local state
-      setImages((prevImages) =>
-        prevImages.filter((img) => img.id !== selectedImage.id)
+      // Remove the deleted media from the local state
+      setMedia((prevMedia) =>
+        prevMedia.filter((item) => item.id !== selectedMedia.id)
       );
-      toast.success("Image deleted successfully!");
-      setSelectedImage(null); // Close the popup window after deletion
+      toast.success("Media deleted successfully!");
+      setSelectedMedia(null); // Close the popup window after deletion
     } catch (error) {
-      console.error("Error deleting image:", error);
-      toast.error("Failed to delete image!");
+      console.error("Error deleting media:", error);
+      toast.error("Failed to delete media!");
     }
   };
 
-  const handleLike = async () => {
+  const fetchComments = async (id) => {
     try {
-      console.log("did not created yet");
+      const response = await axios.get(`http://localhost:8070/comments/${id}`);
+      setComments(response.data);
     } catch (error) {
-      console.error("Error liking post:", error);
+      console.error("Error fetching comments:", error);
     }
+  };
+
+  const handleCommentSubmit = async () => {
+    try {
+      // Make a POST request to save the comment to the database
+      const response = await axios.post(
+        `http://localhost:8070/add-comment/${selectedMedia.id}`,
+        commentInput // Send the comment input as content
+      );
+      // Update the state with the new comment
+      setComments([...comments, response.data]);
+      // Clear the comment input field
+      setCommentInput("");
+      toast.success("Comment added successfully!");
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      toast.error("Failed to add comment.");
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await axios.delete(`http://localhost:8070/delete-comment/${commentId}`);
+      setComments(comments.filter((comment) => comment.id !== commentId));
+      toast.success("Comment deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+
+  const handleFilterChange = (mediaType) => {
+    setFilter(mediaType);
+    fetchMedia(mediaType);
   };
 
   return (
     <div className="post-list-container">
       <h2 className="post-list-heading">My Posts</h2>
+      <div className="filter-buttons">
+        <button
+          className="image1-button"
+          onClick={() => handleFilterChange("image")}
+        >
+          View Images
+        </button>
+        <button
+          className="video1-button"
+          onClick={() => handleFilterChange("video")}
+        >
+          View Videos
+        </button>
+      </div>
       {loading ? (
-        <p>Loading images...</p>
+        <p>Loading media...</p>
       ) : (
         <div className="post-list-items-container">
-          {images.map((img) => (
-            <div key={img.id} className="post-item">
-              <img
-                src={`http://localhost:8070/display?id=${img.id}`}
-                alt="Uploaded"
-                className="post-image"
-                onClick={() => handleImageClick(img.id)}
-              />
-              <p className="post-description">{img.description}</p>
-              {selectedImage && selectedImage.id === img.id && <></>}
+          {media.map((item) => (
+            <div key={item.id} className="post-item">
+              {item.type === "image" ? (
+                <img
+                  src={`http://localhost:8070/display?id=${item.id}`}
+                  alt="Uploaded"
+                  className="post-image"
+                  onClick={() => handleMediaClick(item.id, item.type)}
+                />
+              ) : (
+                <div className="video-container">
+                  <video className="post-video" controls>
+                    <source
+                      src={`http://localhost:8070/video/${item.id}`}
+                      type="video/mp4"
+                    />
+                    Your browser does not support the video tag.
+                  </video>
+                  <button
+                    className="view-button"
+                    onClick={() => handlevideoClick(item.id, item.type)}
+                  >
+                    View
+                  </button>
+                </div>
+              )}
+              <p className="post-description">{item.description}</p>
+              {selectedMedia && selectedMedia.id === item.id && <></>}
             </div>
           ))}
         </div>
       )}
-
-      {selectedImage && (
+      {selectedMedia && (
         <div className="popup-container active">
           <div className="popup-content active">
-            <img
-              src={`http://localhost:8070/display?id=${selectedImage.id}`}
-              alt="Selected"
-              className="selected-image"
-            />
+            {selectedMedia.type === "image" ? (
+              <img
+                src={`http://localhost:8070/display?id=${selectedMedia.id}`}
+                alt="Selected"
+                className="selected-image"
+              />
+            ) : (
+              <div className="selected-video-container">
+                <video className="selected-video" controls>
+                  <source
+                    src={`http://localhost:8070/video/${selectedMedia.id}`}
+                    type="video/mp4"
+                  />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            )}
+            <p className="selected-description">{description}</p>
             <button
               className="update-description-button"
               onClick={handleDescriptionUpdate}
@@ -149,7 +236,6 @@ const PostList = () => {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Update your Description here.."
             />
-
             {/* Comment input field */}
             <div className="like-comment-container">
               <input
@@ -167,11 +253,10 @@ const PostList = () => {
                 <FontAwesomeIcon icon={faPaperPlane} />
               </button>
               {/* Like button */}
-              <button className="like-button" onClick={handleLike}>
+              <button className="like-button">
                 <FontAwesomeIcon icon={faHeart} />
               </button>
             </div>
-
             {/* Display comments */}
             <div className="comments-section">
               <p className="posts-comments">Comments...</p>

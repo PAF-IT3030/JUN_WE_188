@@ -19,7 +19,7 @@
 }
 
 .post-item {
-  border: 1px solid #ddd;
+  border: 1px solid #92905447;
   border-radius: 15px;
   overflow: hidden;
   /* border: 0.2px solid rgba(0, 0, 0, 0.267); */
@@ -27,12 +27,12 @@
 }
 
 .post-item:hover {
-  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1); /* Add box shadow on hover */
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.212); /* Add box shadow on hover */
 }
 
 .post-image {
   width: 100%;
-  height: auto;
+  height: 80%;
   cursor: pointer;
 }
 
@@ -81,7 +81,7 @@
 }
 
 .popup-container.active {
-  opacity: 5;
+  opacity: 2;
 }
 
 .popup-content {
@@ -310,4 +310,155 @@
   margin-left: 5px;
   font-size: 12px;
   color: #808080; /* Light gray color */
+}
+
+.image1-button {
+  padding: 10px 20px;
+  margin-bottom: 50px;
+  cursor: pointer;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.video1-button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  cursor: pointer;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.image1-button:hover {
+  background-color: #007bff;
+  color: white;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.212); /* Add box shadow on hover */
+}
+
+.video1-button:hover {
+  background-color: #007bff;
+  color: white;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.377); /* Add box shadow on hover */
+}
+
+/* Styling for the video player */
+.post-video {
+  height: 350px;
+  width: 100%; /* Set video width to 100% of its container */
+}
+
+/* Styling for the selected video in the popup */
+.selected-video {
+  width: 100%; /* Set video width to 100% of its container */
+}
+
+/* Styling for the video controls */
+.video-controls {
+  display: flex; /* Display controls in a row */
+  justify-content: space-between; /* Space out controls evenly */
+  align-items: center; /* Align controls vertically centered */
+}
+
+/* Styling for the update description button */
+.update-description-button {
+  background-color: #007bff; /* Blue background color */
+  color: #fff; /* White text color */
+  border: none; /* No border */
+  padding: 0.5rem 1rem; /* Padding */
+  cursor: pointer; /* Cursor on hover */
+  border-radius: 4px; /* Rounded corners */
+}
+
+/* Styling for the delete button */
+.delete-button {
+  background-color: #dc3545; /* Red background color */
+  color: #fff; /* White text color */
+  border: none; /* No border */
+  padding: 0.5rem 1rem; /* Padding */
+  cursor: pointer; /* Cursor on hover */
+  border-radius: 4px; /* Rounded corners */
+}
+
+/* Styling for the close popup button */
+.close-popup {
+  position: absolute; /* Position absolute */
+  top: 0; /* Top position 0 */
+  right: 0; /* Right position 0 */
+  background-color: transparent; /* Transparent background */
+  border: none; /* No border */
+  color: #000; /* Black text color */
+  font-size: 1.5rem; /* Larger font size */
+  cursor: pointer; /* Cursor on hover */
+}
+
+/* Styling for the description textarea */
+.description-textarea {
+  width: 100%; /* Set width to 100% */
+  padding: 0.5rem; /* Padding */
+  margin-top: 1rem; /* Margin top */
+  resize: vertical; /* Allow vertical resizing */
+}
+
+/* Styling for the like and comment section */
+.like-comment-container {
+  display: flex; /* Display items in a row */
+  align-items: center; /* Align items vertically centered */
+  margin-top: 1rem; /* Margin top */
+}
+
+/* Styling for the comment input field */
+.commentcontainer {
+  flex-grow: 1; /* Grow to fill available space */
+  padding: 0.5rem; /* Padding */
+  border: 1px solid #ced4da; /* Border */
+  border-radius: 4px; /* Rounded corners */
+}
+
+/* Styling for the submit comment button */
+.submit-comment-button,
+.like-button {
+  background-color: #007bff; /* Blue background color */
+  color: #fff; /* White text color */
+  border: none; /* No border */
+  padding: 0.5rem; /* Padding */
+  margin-left: 0.5rem; /* Margin left */
+  cursor: pointer; /* Cursor on hover */
+  border-radius: 4px; /* Rounded corners */
+}
+
+/* Styling for the comments section */
+.comments-section {
+  margin-top: 1rem; /* Margin top */
+}
+
+/* Styling for individual comments */
+.comment {
+  margin-top: 0.5rem; /* Margin top */
+}
+
+/* Styling for the delete comment button */
+.delete-comment-button {
+  background-color: #dc3545; /* Red background color */
+  color: #fff; /* White text color */
+  border: none; /* No border */
+  padding: 0.25rem; /* Padding */
+  cursor: pointer; /* Cursor on hover */
+  border-radius: 4px; /* Rounded corners */
+}
+.view-button {
+  background-color: #c1a700;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.view-button:hover {
+  background-color: #e1de2d;
+  color: #000;
 }
