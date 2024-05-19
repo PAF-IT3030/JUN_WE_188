@@ -19,6 +19,7 @@ const PostList = () => {
   const [commentInput, setCommentInput] = useState(""); // State variable for comment input
   const [comments, setComments] = useState([]); // State variable for comments
   const [, setFilter] = useState("none"); // State variable for filter
+  const [isLiked, setIsLiked] = useState(false); // State variable for like status
 
   const fetchMedia = async (mediaType) => {
     setLoading(true);
@@ -85,6 +86,7 @@ const PostList = () => {
       toast.error("Failed to update description.");
     }
   };
+
   const handleDelete = async () => {
     try {
       await axios.delete(
@@ -116,7 +118,7 @@ const PostList = () => {
       // Make a POST request to save the comment to the database
       const response = await axios.post(
         `http://localhost:8070/add-comment/${selectedMedia.id}`,
-        commentInput // Send the comment input as content
+        { content: commentInput } // Send the comment input as content
       );
       // Update the state with the new comment
       setComments([...comments, response.data]);
@@ -142,6 +144,10 @@ const PostList = () => {
   const handleFilterChange = (mediaType) => {
     setFilter(mediaType);
     fetchMedia(mediaType);
+  };
+
+  const toggleLike = () => {
+    setIsLiked(!isLiked);
   };
 
   return (
@@ -253,7 +259,11 @@ const PostList = () => {
                 <FontAwesomeIcon icon={faPaperPlane} />
               </button>
               {/* Like button */}
-              <button className="like-button">
+              <button
+                className="like-button"
+                onClick={toggleLike}
+                style={{ color: isLiked ? "red" : "black" }}
+              >
                 <FontAwesomeIcon icon={faHeart} />
               </button>
             </div>

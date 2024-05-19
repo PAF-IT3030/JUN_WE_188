@@ -31,7 +31,7 @@
 }
 
 .post-image {
-  width: 100%;
+  width: 120%;
   height: 80%;
   cursor: pointer;
 }
@@ -156,14 +156,6 @@
   cursor: pointer;
 }
 
-.like-button {
-  color: #ba0202;
-  background-color: #57575700;
-  border: 0.1px solid rgba(0, 0, 0, 0);
-  padding-left: 50px;
-  font-size: 50px;
-}
-
 /* Comment Styles */
 .comments-section {
   margin-top: 20px;
@@ -211,23 +203,8 @@
   align-items: center;
 }
 
-.like-button,
 .submit-comment-button {
   margin-right: 5px;
-}
-
-.like-button {
-  margin-left: -30px;
-  color: #ffffff; /* Default color */
-  background-color: transparent; /* Transparent background */
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  transition: color 0.3s, background-color 0.3s; /* Transition effect */
-}
-
-.like-button:hover {
-  color: #ba0202; /* Change text color to white on hover */
 }
 
 .posts-comments {
@@ -418,8 +395,7 @@
 }
 
 /* Styling for the submit comment button */
-.submit-comment-button,
-.like-button {
+.submit-comment-button {
   background-color: #007bff; /* Blue background color */
   color: #fff; /* White text color */
   border: none; /* No border */
