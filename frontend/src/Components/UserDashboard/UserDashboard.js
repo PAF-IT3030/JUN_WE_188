@@ -1,7 +1,7 @@
 import React from "react";
 import "../../Styles/UserDashboard.css"; // Import your CSS file
 import Feed from "../Feed/Feed";
-import Workout from "../Workout/Workout";
+import Workout from "../Workout/AllWorkout"; // Import Workout from AllWorkout
 import MealPlan from "../MealPlan/MealPlan";
 
 const UserDashboard = ({ posts }) => {
