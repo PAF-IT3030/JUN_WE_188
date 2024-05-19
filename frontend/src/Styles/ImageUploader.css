@@ -1,17 +1,18 @@
-.imageuploder {
-  background-image: url("https://wallpapercave.com/wp/wp7578959.jpg");
+#imageuploder {
+  background-image: url("https://wallpaper.dog/large/20480664.jpg");
+
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 100vh; /* Set height to fill the entire viewport */
   display: flex;
   justify-content: center; /* Center contents horizontally */
   align-items: center; /* Center contents vertically */
   margin-top: -100px;
 }
+
 .image-uploader-container {
   max-width: 400px;
-  margin-left: 35%;
+  margin-left: 55%;
   margin-bottom: 100px;
   margin-top: 2%;
   padding: 50px;
@@ -87,9 +88,57 @@ input[type="file"] {
 }
 
 .description-input {
-  background-color: #7d7d81;
+  background-color: #7b7b7be9;
 }
 
 .descriptioncolor {
   color: white;
+}
+
+#description {
+  color: #ffffff;
+}
+
+.upload-type-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.toggle-button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.toggle-button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.preview-container {
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.preview-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.preview-video {
+  max-width: 100%;
+  height: 350px;
+}
+
+.chooseimagebutton {
+  color: #c3c3c3a0;
+}
+
+.chooseimagelabel {
+  color: hsl(51, 100%, 82%);
 }
