@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/commentworkouts")
@@ -16,37 +17,61 @@ public class commentworkoutController {
     @Autowired
     private commentworkoutService commentworkoutService;
 
-    @PostMapping("/{id}/comments")
-    public ResponseEntity<commentworkout> addComment(@PathVariable long id, @RequestBody commentworkoutDTO comment) {
-        commentworkout updatedCommentworkout = commentworkoutService.addComment(id, comment.getComment());
-        if (updatedCommentworkout != null) {
-            return ResponseEntity.ok(updatedCommentworkout);
+    @PostMapping("/{postId}/comments")
+    public ResponseEntity<?> addComment(@PathVariable long postId, @RequestBody commentworkoutDTO comment) {
+        try {
+            Optional<commentworkout> updatedCommentworkout = commentworkoutService.addComment(postId, comment.getComment());
+            if (updatedCommentworkout.isPresent()) {
+                return ResponseEntity.ok(updatedCommentworkout.get());
+            } else {
+                return ResponseEntity.status(404).body("Post not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the error
+            return ResponseEntity.status(500).body("Internal Server Error");
         }
-        return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/{id}/comments")
-    public ResponseEntity<List<String>> showComments(@PathVariable long id) {
-        List<String> comments = commentworkoutService.showComments(id);
-        if (comments != null) {
-            return ResponseEntity.ok(comments);
+    @GetMapping("/{postId}/comments")
+    public ResponseEntity<?> showComments(@PathVariable long postId) {
+        try {
+            List<String> comments = commentworkoutService.showComments(postId);
+            if (comments != null) {
+                return ResponseEntity.ok(comments);
+            } else {
+                return ResponseEntity.status(404).body("Post not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the error
+            return ResponseEntity.status(500).body("Internal Server Error");
         }
-        return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/{id}/comments/{index}")
-    public ResponseEntity<String> editComment(@PathVariable long id, @PathVariable int index, @RequestBody commentworkoutDTO newComment) {
-        if (commentworkoutService.editComment(id, index, newComment.getComment())) {
-            return ResponseEntity.ok("Comment updated successfully");
+    @PutMapping("/{postId}/comments/{index}")
+    public ResponseEntity<?> editComment(@PathVariable long postId, @PathVariable int index, @RequestBody commentworkoutDTO newComment) {
+        try {
+            if (commentworkoutService.editComment(postId, index, newComment.getComment())) {
+                return ResponseEntity.ok("Comment updated successfully");
+            } else {
+                return ResponseEntity.status(404).body("Post or comment not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the error
+            return ResponseEntity.status(500).body("Internal Server Error");
         }
-        return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}/comments/{index}")
-    public ResponseEntity<String> deleteComment(@PathVariable long id, @PathVariable int index) {
-        if (commentworkoutService.deleteComment(id, index)) {
-            return ResponseEntity.ok("Comment deleted successfully");
+    @DeleteMapping("/{postId}/comments/{index}")
+    public ResponseEntity<?> deleteComment(@PathVariable long postId, @PathVariable int index) {
+        try {
+            if (commentworkoutService.deleteComment(postId, index)) {
+                return ResponseEntity.ok("Comment deleted successfully");
+            } else {
+                return ResponseEntity.status(404).body("Post or comment not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the error
+            return ResponseEntity.status(500).body("Internal Server Error");
         }
-        return ResponseEntity.notFound().build();
     }
 }
