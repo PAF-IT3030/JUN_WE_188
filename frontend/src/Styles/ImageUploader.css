@@ -106,13 +106,13 @@ input[type="file"] {
 }
 
 .toggle-button {
-  padding: 10px 20px;
+  padding: 10px 15px;
   margin: 0 10px;
   cursor: pointer;
   background-color: #f0f0f0;
   border: none;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .toggle-button.active {

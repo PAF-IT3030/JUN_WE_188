@@ -151,6 +151,8 @@ function Workout() {
   return (
     <div
       style={{
+        height: "700px",
+        marginTop: "-100px",
         marginBottom: "1px",
         backgroundImage: `url(${backgroundImage})`,
         backgroundAttachment: "fixed",
