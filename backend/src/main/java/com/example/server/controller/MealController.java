@@ -3,10 +3,8 @@ package com.example.server.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.example.server.model.Meal;
 import com.example.server.service.MealServiceImpl;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -30,7 +28,7 @@ public class MealController {
 
     @PostMapping
     public Meal createMeal(@RequestParam("name") String name, @RequestParam("description") String description,
-            @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+                           @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
         Meal meal = new Meal();
 
@@ -42,7 +40,7 @@ public class MealController {
 
     @PutMapping("/{id}")
     public Meal updateMeal(@PathVariable String id, @RequestParam("name") String name,
-            @RequestParam("description") String description, @RequestParam("imageFile") MultipartFile imageFile)
+                           @RequestParam("description") String description, @RequestParam("imageFile") MultipartFile imageFile)
             throws IOException {
 
         Meal meal = new Meal();
