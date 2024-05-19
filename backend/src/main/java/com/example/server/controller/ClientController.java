@@ -5,7 +5,6 @@ import com.example.server.model.Image;
 import com.example.server.service.ImageService;
 import com.example.server.service.CommentService;
 import com.example.server.model.Comment;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,6 @@ public class ClientController {
     private final ImageService imageService;
     private final CommentService commentService;
 
-    @Autowired
     public ClientController(ImageService imageService, CommentService commentService) {
         this.imageService = imageService;
         this.commentService = commentService;
