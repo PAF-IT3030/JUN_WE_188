@@ -1,3 +1,4 @@
+//Implements the image service interface for image related options
 package com.example.server.service;
 
 import com.example.server.model.Image;
@@ -30,29 +31,22 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image updateImage(Image updatedImage) {
+        // Implement the update logic here
+        // For example:
+        // Get the existing image from the repository based on ID
+        // Update its fields with the data from updatedImage
+        // Save the updated image back to the repository
         Image existingImage = imageRepository.findById(updatedImage.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Image not found with ID: " + updatedImage.getId()));
         existingImage.setImage(updatedImage.getImage());
-        existingImage.setVideo(updatedImage.getVideo());
         existingImage.setDescription(updatedImage.getDescription());
 
         return imageRepository.save(existingImage);
     }
 
+
     @Override
     public void deleteImage(Image image) {
         imageRepository.delete(image);
     }
-
-    // New methods for videos
-    @Override
-    public List<Image> getAllVideos() {
-        return (List<Image>) imageRepository.findAll(); // Add proper filtering logic if needed
-    }
-
-    @Override
-    public Image getVideoById(long id) {
-        return imageRepository.findById(id).orElse(null); // Add proper filtering logic if needed
-    }
-
 }

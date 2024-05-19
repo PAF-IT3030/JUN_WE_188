@@ -50,23 +50,25 @@ function AllWorkout() {
     // Implement like functionality
   };
 
-  const handleComment = (postId) => {
-    const formData = {
-      text: commentText,
-    };
+  const handleComment = () => {
+    const formData = new FormData();
+    formData.append("description", description);
 
     axios
-      .post(`http://localhost:8070/workoutadd-comment/${postId}`, formData)
+      .post("http://localhost:8070/workoutadd-comment/{id}", formData)
       .then((response) => {
         if (response.data && response.data !== -1) {
           fetchPosts();
-          setCommentText(""); // Clear input field after successful addition
+          setDescription(""); // Clear input field after successful addition
+          // toast.success("Post added successfully!");
+          // handleClose();
         } else {
-          alert("Failed to add comment!");
+          alert("Failed to add post!");
+          // toast.error("Failed to add post!");
         }
       })
       .catch((error) => {
-        console.error("Error adding comment:", error);
+        console.error("Error adding post:", error);
       });
   };
 

@@ -1,18 +1,17 @@
-#imageuploder {
-  background-image: url("https://wallpaper.dog/large/20480664.jpg");
-
+.imageuploder {
+  background-image: url("https://wallpapercave.com/wp/wp7578959.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  height: 100vh; /* Set height to fill the entire viewport */
   display: flex;
   justify-content: center; /* Center contents horizontally */
   align-items: center; /* Center contents vertically */
   margin-top: -100px;
 }
-
 .image-uploader-container {
   max-width: 400px;
-  margin-left: 55%;
+  margin-left: 35%;
   margin-bottom: 100px;
   margin-top: 2%;
   padding: 50px;
@@ -88,7 +87,7 @@ input[type="file"] {
 }
 
 .description-input {
-  background-color: #7b7b7be9;
+  background-color: #7d7d81;
 }
 
 .descriptioncolor {
