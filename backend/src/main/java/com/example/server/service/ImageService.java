@@ -14,4 +14,5 @@ public interface ImageService {
     // New methods for videos
     List<Image> getAllVideos();
     Image getVideoById(long id);
+
 }

@@ -54,4 +54,5 @@ public class ImageServiceImpl implements ImageService {
     public Image getVideoById(long id) {
         return imageRepository.findById(id).orElse(null); // Add proper filtering logic if needed
     }
+
 }
