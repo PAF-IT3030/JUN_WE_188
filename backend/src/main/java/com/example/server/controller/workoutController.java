@@ -3,7 +3,6 @@ package com.example.server.controller;
 import com.example.server.DTO.workoutDTO;
 import com.example.server.model.workout;
 import com.example.server.service.workoutService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,6 @@ public class workoutController {
 
     private final workoutService workoutService;
 
-    @Autowired
     public workoutController(workoutService workoutService) {
         this.workoutService = workoutService;
     }
