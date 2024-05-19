@@ -4,7 +4,9 @@ import com.example.server.model.commentworkout;
 import com.example.server.repository.commentworkoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class commentworkoutServiceImpl implements commentworkoutService {
@@ -13,43 +15,68 @@ public class commentworkoutServiceImpl implements commentworkoutService {
     private commentworkoutRepository commentworkoutRepo;
 
     @Override
-    public commentworkout addComment(long id, String comment) {
-        commentworkout existingCommentworkout = commentworkoutRepo.findById(id).orElse(null);
-        if (existingCommentworkout != null) {
-            existingCommentworkout.addComment(comment);
-            return commentworkoutRepo.save(existingCommentworkout);
+    public Optional<commentworkout> addComment(long id, String comment) {
+        try {
+            Optional<commentworkout> existingCommentworkout = commentworkoutRepo.findById(id);
+            if (existingCommentworkout.isPresent()) {
+                commentworkout workout = existingCommentworkout.get();
+                workout.addComment(comment);
+                commentworkoutRepo.save(workout);
+                return Optional.of(workout);
+            }
+            return Optional.empty();
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the error
+            return Optional.empty();
         }
-        return null;
     }
 
     @Override
     public List<String> showComments(long id) {
-        commentworkout existingCommentworkout = commentworkoutRepo.findById(id).orElse(null);
-        if (existingCommentworkout != null) {
-            return existingCommentworkout.getComments();
+        try {
+            Optional<commentworkout> existingCommentworkout = commentworkoutRepo.findById(id);
+            return existingCommentworkout.map(commentworkout::getComments).orElse(null);
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the error
+            return null;
         }
-        return null;
     }
 
     @Override
     public boolean editComment(long id, int index, String newComment) {
-        commentworkout existingCommentworkout = commentworkoutRepo.findById(id).orElse(null);
-        if (existingCommentworkout != null && index >= 0 && index < existingCommentworkout.getComments().size()) {
-            existingCommentworkout.getComments().set(index, newComment);
-            commentworkoutRepo.save(existingCommentworkout);
-            return true;
+        try {
+            Optional<commentworkout> existingCommentworkout = commentworkoutRepo.findById(id);
+            if (existingCommentworkout.isPresent()) {
+                commentworkout workout = existingCommentworkout.get();
+                if (index >= 0 && index < workout.getComments().size()) {
+                    workout.getComments().set(index, newComment);
+                    commentworkoutRepo.save(workout);
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the error
+            return false;
         }
-        return false;
     }
 
     @Override
     public boolean deleteComment(long id, int index) {
-        commentworkout existingCommentworkout = commentworkoutRepo.findById(id).orElse(null);
-        if (existingCommentworkout != null && index >= 0 && index < existingCommentworkout.getComments().size()) {
-            existingCommentworkout.deleteComment(index);
-            commentworkoutRepo.save(existingCommentworkout);
-            return true;
+        try {
+            Optional<commentworkout> existingCommentworkout = commentworkoutRepo.findById(id);
+            if (existingCommentworkout.isPresent()) {
+                commentworkout workout = existingCommentworkout.get();
+                if (index >= 0 && index < workout.getComments().size()) {
+                    workout.deleteComment(index);
+                    commentworkoutRepo.save(workout);
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the error
+            return false;
         }
-        return false;
     }
 }
