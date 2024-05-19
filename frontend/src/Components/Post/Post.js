@@ -235,6 +235,14 @@ const PostList = () => {
             </button>
             <button className="close-popup" onClick={handleClosePreview}>
               <FontAwesomeIcon icon={faTimes} />
+            </button>{" "}
+            {/* Like button */}
+            <button
+              className="like-button"
+              onClick={toggleLike}
+              style={{ color: isLiked ? "red" : "white" }}
+            >
+              <FontAwesomeIcon icon={faHeart} />
             </button>
             <textarea
               className="description-textarea"
@@ -257,14 +265,6 @@ const PostList = () => {
                 onClick={handleCommentSubmit}
               >
                 <FontAwesomeIcon icon={faPaperPlane} />
-              </button>
-              {/* Like button */}
-              <button
-                className="like-button"
-                onClick={toggleLike}
-                style={{ color: isLiked ? "red" : "black" }}
-              >
-                <FontAwesomeIcon icon={faHeart} />
               </button>
             </div>
             {/* Display comments */}
