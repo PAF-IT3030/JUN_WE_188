@@ -224,8 +224,56 @@ const PostList = () => {
               <FontAwesomeIcon icon={faTrash} />
             </button>
             <button className="close-popup" onClick={handleClosePreview}>
-              <FontAwesomeIcon icon={faTimes} /> Close
+
+              <FontAwesomeIcon icon={faTimes} />
+            </button>{" "}
+            {/* Like button */}
+            <button
+              className="like-button"
+              onClick={toggleLike}
+              style={{ color: isLiked ? "red" : "white" }}
+            >
+              <FontAwesomeIcon icon={faHeart} />
             </button>
+            <textarea
+              className="description-textarea"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Update your Description here.."
+            />
+            {/* Comment input field */}
+            <div className="like-comment-container">
+              <input
+                className="commentcontainer"
+                type="text"
+                placeholder="Add a comment..."
+                value={commentInput}
+                onChange={(e) => setCommentInput(e.target.value)}
+              />
+              {/* Button to submit the comment */}
+              <button
+                className="submit-comment-button"
+                onClick={handleCommentSubmit}
+              >
+                <FontAwesomeIcon icon={faPaperPlane} />
+              </button>
+            </div>
+            {/* Display comments */}
+            <div className="comments-section">
+              <p className="posts-comments">Comments...</p>
+              {comments.map((comment) => (
+                <div key={comment.id} className="comment">
+                  <p>{comment.content}</p>
+                  <button
+                    className="delete-comment-button"
+                    onClick={() => handleDeleteComment(comment.id)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </div>
+              ))}
+            </div>
+
           </div>
         </div>
       )}

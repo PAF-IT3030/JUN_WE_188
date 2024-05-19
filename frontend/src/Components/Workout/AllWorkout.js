@@ -25,7 +25,6 @@ function AllWorkout() {
   const [posts, setPosts] = useState([]);
   const [commentText, setCommentText] = useState("");
   const [editingComment, setEditingComment] = useState({});
-  const [description, setDescription] = useState("");
 
   useEffect(() => {
     fetchPosts();

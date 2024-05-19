@@ -93,3 +93,51 @@ input[type="file"] {
 .descriptioncolor {
   color: white;
 }
+
+#description {
+  color: #ffffff;
+}
+
+.upload-type-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.toggle-button {
+  padding: 10px 15px;
+  margin: 0 10px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.toggle-button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.preview-container {
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.preview-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.preview-video {
+  max-width: 100%;
+  height: 350px;
+}
+
+.chooseimagebutton {
+  color: #c3c3c3a0;
+}
+
+.chooseimagelabel {
+  color: hsl(51, 100%, 82%);
+}
