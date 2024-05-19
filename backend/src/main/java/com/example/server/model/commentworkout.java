@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "commentworkout_table")
+@Table(name = "commentworkout")
 public class commentworkout {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +21,13 @@ public class commentworkout {
     private List<String> comments = new ArrayList<>();
 
     // Constructors, getters, and setters
+
+    public commentworkout() {}
+
+    public commentworkout(long id, List<String> comments) {
+        this.id = id;
+        this.comments = comments;
+    }
 
     public long getId() {
         return id;

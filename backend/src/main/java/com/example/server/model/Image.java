@@ -13,20 +13,21 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @Entity
 @Table(name = "Posts_table")
 public class Image {
-    //@id-primary key
     @Id
-    //indicated tht the database should automatically generate the primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-
-    //stores as large object in the databse
     @Lob
     @JsonSerialize(using = BlobSerializer.class)
     @JsonDeserialize(using = BlobDeserializer.class)
     private Blob image;
 
-    private String description; // Add description field
+    @Lob
+    @JsonSerialize(using = BlobSerializer.class)
+    @JsonDeserialize(using = BlobDeserializer.class)
+    private Blob video;
+
+    private String description;
 
     private Date date = new Date();
 
@@ -46,6 +47,14 @@ public class Image {
         this.image = image;
     }
 
+    public Blob getVideo() {
+        return video;
+    }
+
+    public void setVideo(Blob video) {
+        this.video = video;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -58,6 +67,4 @@ public class Image {
         return date;
     }
 }
-
-
 

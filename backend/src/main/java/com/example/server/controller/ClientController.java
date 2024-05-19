@@ -1,10 +1,10 @@
 package com.example.server.controller;
 
 import com.example.server.DTO.PostDTO;
-import com.example.server.model.Image;
-import com.example.server.service.ImageService;
-import com.example.server.service.CommentService;
 import com.example.server.model.Comment;
+import com.example.server.model.Image;
+import com.example.server.service.CommentService;
+import com.example.server.service.ImageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.rowset.serial.SerialBlob;
-import javax.sql.rowset.serial.SerialException;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -34,52 +31,7 @@ public class ClientController {
         this.commentService = commentService;
     }
 
-    @PostMapping("/add-comment/{id}")
-    public ResponseEntity<Comment> addComment(@PathVariable("id") long imageId, @RequestBody String commentContent) {
-        try {
-            Image image = imageService.viewById(imageId);
-            if (image != null) {
-                Comment comment = new Comment();
-                comment.setImage(image);
-                comment.setContent(commentContent);
-                Comment savedComment = commentService.create(comment);
-                return ResponseEntity.ok(savedComment);
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // Handle or log the exception as needed
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/comments/{id}")
-    public ResponseEntity<List<Comment>> getCommentsByImageId(@PathVariable("id") long imageId) {
-        List<Comment> comments = commentService.getByImageId(imageId);
-        if (comments != null) {
-            return ResponseEntity.ok(comments);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @DeleteMapping("/delete-comment/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable("commentId") long commentId) {
-        try {
-            Comment comment = commentService.findById(commentId);
-            if (comment != null) {
-                commentService.delete(comment);
-                return ResponseEntity.ok().build();
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // Handle or log the exception as needed
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/ping")
-    @ResponseBody
-    public String helloWorld() {
-        return "Hello World!";
-    }
+    // Image handling endpoints
 
     @GetMapping("/display")
     public ResponseEntity<byte[]> displayImage(@RequestParam("id") String idParam) {
@@ -134,20 +86,12 @@ public class ClientController {
             long id = Long.parseLong(idParam);
             Image image = imageService.viewById(id);
             if (image != null) {
-                String description = image.getDescription();
-                return ResponseEntity.ok(description);
+                return ResponseEntity.ok(image.getDescription());
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @ExceptionHandler({IOException.class, SerialException.class, SQLException.class})
-    public ModelAndView handleFileUploadException(Exception ex, HttpServletRequest request, HttpServletResponse response) {
-        ModelAndView mv = new ModelAndView("error");
-        mv.addObject("errorMessage", "Error uploading file: " + ex.getMessage());
-        return mv;
     }
 
     @PutMapping("/update-description")
@@ -160,7 +104,7 @@ public class ClientController {
                 imageService.updateImage(image);
                 return ResponseEntity.ok().build();
             }
-        } catch (NumberFormatException  e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         }
         return ResponseEntity.notFound().build();
@@ -176,29 +120,84 @@ public class ClientController {
         public void setDescription(String description) {
             this.description = description;
         }
-
     }
 
-    @DeleteMapping("/delete-post/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable("id") long id) {
+    // Video handling endpoints
+
+    @GetMapping("/videos")
+    public ResponseEntity<List<PostDTO>> getAllVideos() {
+        List<Image> videos = imageService.getAllVideos();
+        if (!videos.isEmpty()) {
+            List<PostDTO> posts = videos.stream()
+                    .filter(video -> video.getVideo() != null)
+                    .map(video -> new PostDTO(video.getId(), video.getVideo(), video.getDescription(), true))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(posts);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/video/{id}")
+    public ResponseEntity<byte[]> getVideoById(@PathVariable("id") long id) {
         try {
-            Image image = imageService.viewById(id);
-            if (image != null) {
-                imageService.deleteImage(image); // Assuming a delete method in your service
-                return ResponseEntity.ok().build(); // Return success response
+            Image video = imageService.getVideoById(id);
+            if (video != null) {
+                Blob videoData = video.getVideo();
+                if (videoData != null) {
+                    byte[] videoBytes = videoData.getBytes(1, (int) videoData.length());
+                    return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).body(videoBytes);
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace(); // Handle or log the exception as needed
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return ResponseEntity.notFound().build();
     }
 
+    @DeleteMapping("/video/{id}")
+    public ResponseEntity<Void> deleteVideo(@PathVariable("id") long id) {
+        try {
+            Image video = imageService.getVideoById(id);
+            if (video != null) {
+                imageService.deleteImage(video);
+                return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @SuppressWarnings("null")
+    @PostMapping(value = "/add-video", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Long> addVideoPost(@RequestParam("video") MultipartFile file, @RequestParam("description") String description) {
+        try {
+            if (!file.getContentType().startsWith("video/")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(-1L);
+            }
+
+            byte[] bytes = file.getBytes();
+            Blob blob = new SerialBlob(bytes);
+            Image video = new Image();
+            video.setVideo(blob);
+            video.setDescription(description);
+            imageService.create(video);
+
+            return ResponseEntity.ok(video.getId());
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(-1L);
+        }
+    }
 
     @GetMapping("/all-posts")
     public ResponseEntity<List<PostDTO>> getAllPosts() {
         List<Image> images = imageService.viewAll();
         if (!images.isEmpty()) {
             List<PostDTO> posts = images.stream()
+                    .filter(image -> image.getVideo() == null) // Filter out images with videos
                     .map(image -> new PostDTO(image.getId(), image.getImage(), image.getDescription()))
                     .collect(Collectors.toList());
             return ResponseEntity.ok(posts);
@@ -206,4 +205,63 @@ public class ClientController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping("/delete-post/{id}")
+    public ResponseEntity<Void> deletePost(@PathVariable("id") long id) {
+        try {
+            Image image = imageService.viewById(id);
+            if (image != null) {
+                imageService.deleteImage(image);
+                return ResponseEntity.ok().build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // Comment handling endpoints
+
+    @PostMapping("/add-comment/{id}")
+    public ResponseEntity<Comment> addComment(@PathVariable("id") long imageId, @RequestBody String commentContent) {
+        try {
+            Image image = imageService.viewById(imageId);
+            if (image != null) {
+                Comment comment = new Comment();
+                comment.setImage(image);
+                comment.setContent(commentContent);
+                Comment savedComment = commentService.create(comment);
+                return ResponseEntity.ok(savedComment);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/comments/{id}")
+    public ResponseEntity<List<Comment>> getCommentsByImageId(@PathVariable("id") long imageId) {
+        List<Comment> comments = commentService.getByImageId(imageId);
+        if (comments != null) {
+            return ResponseEntity.ok(comments);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/delete-comment/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable("commentId") long commentId) {
+        try {
+            Comment comment = commentService.findById(commentId);
+            if (comment != null) {
+                commentService.delete(comment);
+                return ResponseEntity.ok().build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 }
+
